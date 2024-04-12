@@ -51,7 +51,10 @@ exports.register = async(req, res) => {
             maxAge: 86400000,
         })        
 
-        return res.sendStatus(200)
+        return res.status(200).send({ 
+            success: true,
+            message: "User registered" 
+        });
     } 
     catch (error) {
         console.log(error);
@@ -61,3 +64,61 @@ exports.register = async(req, res) => {
         })
     }
 }   
+
+exports.login = async(req, res) => {
+    //check for error
+    const errors = validationResult(req)
+    if(!errors.isEmpty()) {
+        return res.status(400).json({
+            success: false,
+            message: errors.array()
+        })
+    }
+
+    const {email, password} = req.body;
+
+    try {
+        const user = await User.findOne({email})
+
+        if(!user) {
+            return res.status(400).json({
+                success: false,
+                message: "User not found"
+            })
+        }
+
+        const isMatch = await bcrypt.compare(password, user.password)
+        if(!isMatch) {
+            return res.status(400).json({
+                success: false,
+                message: "Password not match"
+            })
+        }
+
+        //create access token
+        const payload = {
+            userId: user._id
+        }
+        const token = jwt.sign(payload, process.env.JWT_SECRET_KEY, {
+            expiresIn: "1d"
+        })
+
+        res.cookie("auth_token", token, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === "production",
+            maxAge: 86400000,
+        })
+
+        return res.status(200).json({
+            success: true,
+            userId: user._id,
+        })
+    } 
+    catch (error) {
+        console.log(error);
+        return res.status(500).json({
+            success: false,
+            message: "Internal server error"
+        })
+    }
+}
