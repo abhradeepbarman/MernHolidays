@@ -4,6 +4,7 @@ require("dotenv").config()
 const mongoose = require("mongoose")
 const userRoutes = require("./src/routes/users")
 const authRoutes = require("./src/routes/auth")
+const cookieParser = require("cookie-parser")
 
 mongoose.connect(process.env.MONGODB_CONNECTION_STRING)
     .then(() => console.log("DB connection successful"))
@@ -12,7 +13,11 @@ mongoose.connect(process.env.MONGODB_CONNECTION_STRING)
 const app = express()
 app.use(express.json())
 app.use(express.urlencoded({extended: true}))       //helps in parsing url
-app.use(cors())
+app.use(cors({
+    origin: process.env.FRONTEND_URL,
+    credentials: true,
+}))
+app.use(cookieParser())
 
 app.use("/api/users", userRoutes)
 app.use("/api/auth", authRoutes)

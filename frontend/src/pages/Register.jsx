@@ -1,7 +1,10 @@
 import {useForm} from "react-hook-form"
 import * as apiClient from "../api-client"
+import {useNavigate} from "react-router-dom"
 
 function Register() {
+
+    const navigate = useNavigate();
 
     const { 
       register,
@@ -19,6 +22,7 @@ function Register() {
        setValue("email", "");
        setValue("password", "");
        setValue("confirmPassword", "");
+       navigate("/")
     }
 
   return (
