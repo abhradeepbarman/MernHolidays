@@ -1,8 +1,9 @@
+import { useSelector } from "react-redux"
 import { Link } from "react-router-dom"
-import { useAppContext } from "../context/AppContext"
 
 function Header() {
-  const {isLoggedIn} = useAppContext()
+
+  const { token } = useSelector((state) => state.auth)
 
   return (
     <div className="bg-blue-800 py-6">
@@ -13,7 +14,7 @@ function Header() {
 
         <span className="flex space-x-2">
           {
-            isLoggedIn ? ( 
+            token ? ( 
               <>
                 <Link to={"/my-bookings"}>My Bookings</Link>
                 <Link to={"/my-hotels"}>My Hotels</Link>
