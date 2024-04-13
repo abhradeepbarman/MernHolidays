@@ -1,9 +1,7 @@
 import {useForm} from "react-hook-form"
-import * as apiClient from "../api-client"
 import {useNavigate} from "react-router-dom"
-import Cookies from "js-cookie"
-import {useDispatch} from "react-redux"
-import {setToken} from "../Store/slices/authSlice"
+import { useDispatch } from "react-redux"
+import * as apiClient from "../api-client"
 
 function Register() {
 
@@ -19,22 +17,14 @@ function Register() {
     } = useForm();
 
     const onsubmit = async(data) => {
-       const response = await apiClient.register(data);
-       console.log("response", response);
+      apiClient.register(data, dispatch, navigate);
+
+       //clear the form
        setValue("firstName", "");
        setValue("lastName", "");
        setValue("email", "");
        setValue("password", "");
-       setValue("confirmPassword", "");
-       navigate("/")
-
-      //get cookie
-      const authToken = Cookies.get("auth_token")
-      console.log("auth token", authToken);
-      if(authToken) {
-        localStorage.setItem("auth_token", authToken)
-        dispatch(setToken(authToken))
-      }
+       setValue("confirmPassword", "");  
     }
 
   return (

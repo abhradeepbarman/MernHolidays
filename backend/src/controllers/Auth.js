@@ -35,25 +35,12 @@ exports.register = async(req, res) => {
             password: hashedPassword,
             firstName,
             lastName
-        })
-
-        //create token
-        const payload = {
-            userId: newUser._id
-        }
-        const token = jwt.sign(payload, process.env.JWT_SECRET_KEY, {
-            expiresIn: "1d"
-        })
-
-        res.cookie("auth_token", token, {
-            httpOnly: false,
-            secure: process.env.NODE_ENV === "production",
-            maxAge: 86400000,
-        })        
+        }) 
 
         return res.status(200).send({ 
             success: true,
-            message: "User registered" 
+            message: "User registered",
+            userId: newUser._id, 
         });
     } 
     catch (error) {
@@ -87,7 +74,7 @@ exports.login = async(req, res) => {
             })
         }
 
-        const isMatch = await bcrypt.compare(password, user.password)
+        const isMatch = bcrypt.compare(password, user.password)
         if(!isMatch) {
             return res.status(400).json({
                 success: false,
@@ -95,23 +82,22 @@ exports.login = async(req, res) => {
             })
         }
 
-        //create access token
+        //create token
         const payload = {
             userId: user._id
         }
+
         const token = jwt.sign(payload, process.env.JWT_SECRET_KEY, {
             expiresIn: "1d"
         })
 
-        res.cookie("auth_token", token, {
-            httpOnly: false,
-            secure: process.env.NODE_ENV === "production",
-            maxAge: 86400000,
-        })
+        res.cookie("auth_token", token);
 
         return res.status(200).json({
             success: true,
+            message: "User logged in",
             userId: user._id,
+            token,
         })
     } 
     catch (error) {

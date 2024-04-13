@@ -21,7 +21,7 @@ function Header() {
                 <button>Sign out</button>
               </>
             ) : (
-              <Link to={"/register"} className="flex items-center text-blue-600 px-3 font-bold bg-white hover:bg-gray-100 hover:text-green-500">Sign In</Link>
+              <Link to={"/sign-in"} className="flex items-center text-blue-600 px-3 font-bold bg-white hover:bg-gray-100 hover:text-green-500">Sign In</Link>
             )
           }
         </span>
