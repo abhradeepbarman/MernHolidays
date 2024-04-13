@@ -12,7 +12,7 @@ export const authSlice = createSlice({
     },
     setUserId: (state, action) => {
       state.userId = action.payload
-    }
+    },
   },
 })
 

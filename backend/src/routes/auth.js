@@ -15,4 +15,12 @@ router.get("/validate-token", verifyToken, (req, res) => {
     res.status(200).send({userId: req.userId})
 })
 
+router.post("/logout", (req, res)=>{
+    res.cookie("auth_token", "", {
+        expires: new Date(0)
+    })
+
+    res.send()
+})
+
 module.exports = router

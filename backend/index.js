@@ -5,10 +5,13 @@ const mongoose = require("mongoose")
 const userRoutes = require("./src/routes/users")
 const authRoutes = require("./src/routes/auth")
 const cookieParser = require("cookie-parser")
+const path = require("path")
 
 mongoose.connect(process.env.MONGODB_CONNECTION_STRING)
     .then(() => console.log("DB connection successful"))
     .catch(() => console.log("DB connection error"))
+
+
 
 const app = express()
 app.use(express.json())

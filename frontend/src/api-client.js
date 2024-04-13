@@ -66,7 +66,7 @@ export const signIn = async(formData, dispatch, navigate) => {
         localStorage.setItem("userId", userId)
         dispatch(setUserId(userId))
 
-        toast.success("Signin successful", {
+        toast.success("Sign in successful", {
             duration: 2000,
         })
 
@@ -89,4 +89,26 @@ export const validateToken = async() => {
     }
 
     return response;
+}
+
+export const signout = async(dispatch, navigate) => {
+
+    const response = await fetch(`${API_BASE_URL}/api/auth/logout`, {
+        method: "POST",
+        credentials: "include",
+    })
+
+    if(!response.ok) {
+        throw new Error("Error during sign out")
+    }
+
+    localStorage.removeItem("auth_token");
+    localStorage.removeItem("userId");
+
+    dispatch(setToken(null))
+    dispatch(setUserId(null))
+
+    toast.success("Signed Out")
+
+    navigate("/")
 }
