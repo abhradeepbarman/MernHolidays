@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "start": "node index.js",
     "dev": "nodemon index.js",
     "e2e": "cross-env DOTENV_CONFIG_PATH=.env.e2e nodemon index.js"
   },
