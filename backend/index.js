@@ -6,6 +6,14 @@ const userRoutes = require("./src/routes/users")
 const authRoutes = require("./src/routes/auth")
 const cookieParser = require("cookie-parser")
 const path = require("path")
+const cloudinary = require('cloudinary').v2;
+const myHotelRoutes = require("./src/routes/my-hotels")
+
+cloudinary.config({
+    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+    api_key: process.env.CLOUDINARY_API_KEY,
+    api_secret: process.env.CLOUDINARY_API_SECRET,
+});
 
 mongoose.connect(process.env.MONGODB_CONNECTION_STRING)
     .then(() => console.log("DB connection successful"))
@@ -24,6 +32,7 @@ app.use(cookieParser())
 
 app.use("/api/users", userRoutes)
 app.use("/api/auth", authRoutes)
+app.use("/api/my-hotels", myHotelRoutes)
 
 const PORT = process.env.PORT
 app.listen(PORT, () => {
