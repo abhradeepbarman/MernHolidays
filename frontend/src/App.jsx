@@ -5,6 +5,7 @@ import { Toaster } from "react-hot-toast"
 import SignIn from "./pages/SignIn"
 import { useSelector } from "react-redux"
 import AddHotel from "./pages/AddHotel"
+import MyHotels from "./pages/MyHotels"
 
 function App() {
   const {token} = useSelector((state) => state.auth)
@@ -36,6 +37,7 @@ function App() {
 
         {
           token &&  (
+          <>
             <Route  
               path="/add-hotel"
               element={
@@ -44,6 +46,16 @@ function App() {
                 </Layout>
               }
             />
+
+            <Route  
+              path="/my-hotels"
+              element={
+                <Layout>
+                  <MyHotels />
+                </Layout>
+              }
+            />
+          </>  
           )
         }
 

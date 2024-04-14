@@ -55,3 +55,23 @@ exports.addHotel = async(req, res) => {
         })  
     } 
 }
+
+exports.getAllHotels = async(req, res) => {
+
+    try {
+        const hotels = await Hotel.find({
+            userId: req.userId
+        })
+        
+        return res.status(200).json({
+            success: true,
+            message: "Hotels fetched successfully",
+            hotels
+        })
+    } catch (error) {
+        return res.status(500).json({
+            success: false,
+            message: "Error fetching hotels"
+        })
+    }
+}

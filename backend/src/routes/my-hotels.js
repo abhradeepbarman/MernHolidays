@@ -1,5 +1,5 @@
 const express = require("express")
-const { addHotel } = require("../controllers/Hotel")
+const { addHotel, getAllHotels } = require("../controllers/Hotel")
 const { verifyToken } = require("../middleware/auth")
 const { body } = require("express-validator")
 const router = express.Router()
@@ -29,5 +29,7 @@ router.post("/", upload.array("imageFiles", 6), verifyToken, [
         .isArray()
         .withMessage("Hotel Facilities is required"),
 ], addHotel)
+
+router.get("/", verifyToken, getAllHotels)
 
 module.exports = router

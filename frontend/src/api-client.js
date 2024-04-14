@@ -147,3 +147,20 @@ export const addMyHotel = async(formData, dispatch) => {
         toast.dismiss(toastId)
     }
 }
+
+export const fetchMyHotels = async() => {
+    const toastId = toast.loading("Loading...")
+    const response = await fetch(`${API_BASE_URL}/api/my-hotels`, {
+        credentials: "include",
+    })
+
+    const result = await response.json()
+    console.log(result);
+
+    if(!response.ok) {
+        throw new Error("Error fetching Hotels");
+    }
+
+    toast.dismiss(toastId)
+    return result;
+}
