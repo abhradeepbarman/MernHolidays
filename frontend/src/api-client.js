@@ -113,9 +113,9 @@ export const signout = async(dispatch, navigate) => {
     navigate("/")
 }
 
-export const addMyHotel = async(formData) => {
+export const addMyHotel = async(formData, dispatch) => {
     const toastId = toast.loading("Loading...")
-    setIsLoading(true)
+    dispatch(setIsLoading(true))
 
     try {
         const response = await fetch(`${API_BASE_URL}/api/my-hotels`, {
@@ -123,6 +123,8 @@ export const addMyHotel = async(formData) => {
             credentials: "include",
             body: formData
         })
+
+        console.log(response.json());
 
 
         if(!response.ok) {
@@ -141,7 +143,7 @@ export const addMyHotel = async(formData) => {
     }
 
     finally{
-        setIsLoading(false)
+        dispatch(setIsLoading(false))
         toast.dismiss(toastId)
     }
 }

@@ -5,10 +5,13 @@ import FacilitiesSection from "./FacilitiesSection"
 import GuestsSection from "./GuestsSection"
 import ImagesSection from "./ImagesSection"
 import {useSelector} from "react-redux"
+import { addMyHotel } from "../../api-client";
+import { useDispatch } from "react-redux";
 
 
-const ManageHotelForm = ({onSave}) => {
+const ManageHotelForm = () => {
     const {isLoading} = useSelector((state) => state.auth)
+    const dispatch = useDispatch()
 
     const {
         register,
@@ -17,6 +20,11 @@ const ManageHotelForm = ({onSave}) => {
         watch,
         reset
     } = useForm()
+
+    const handleSave = (formData) => {
+      console.log("inside handle save", formData);
+      addMyHotel(formData, dispatch);
+    }
 
     const onsubmit = (data) => {
       console.log("form data -->",data);
@@ -40,7 +48,7 @@ const ManageHotelForm = ({onSave}) => {
         formData.append(`imageFiles`, imageFile)
       })
       
-      onSave(formData)
+      handleSave(formData)
       reset()
     }
 
