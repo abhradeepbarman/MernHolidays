@@ -36,7 +36,7 @@ function MyHotels() {
 
                         <div className="grid grid-cols-5 gap-2">
                             <div className="border border-slate-300 rounded-sm p-3 flex items-center gap-2">
-                                <BsMap className="mr-1" />
+                                <BsMap className="mr-1" fontSize={28} />
                                 {hotel.city}, {hotel.country}
                             </div>
 
@@ -51,7 +51,7 @@ function MyHotels() {
                             </div>
 
                             <div className="border border-slate-300 rounded-sm p-3 flex items-center gap-2">
-                                <BiHotel className="mr-1" />
+                                <BiHotel className="mr-1" fontSize={28} />
                                 {hotel.adultCount} adults, {hotel.childCount} children
                             </div>
 
@@ -63,7 +63,7 @@ function MyHotels() {
 
                         <span className="flex justify-end">
                             <Link to={`/edit-hotel/${hotel._id}`} className="flex bg-blue-600 text-white text-xl font-bold p-2 hover:bg-blue-500 outline-none">
-                                View Details
+                                Edit Details
                             </Link>
                         </span>
                     </div>

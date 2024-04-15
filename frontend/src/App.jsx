@@ -6,6 +6,7 @@ import SignIn from "./pages/SignIn"
 import { useSelector } from "react-redux"
 import AddHotel from "./pages/AddHotel"
 import MyHotels from "./pages/MyHotels"
+import EditHotel from "./pages/EditHotel"
 
 function App() {
   const {token} = useSelector((state) => state.auth)
@@ -52,6 +53,15 @@ function App() {
               element={
                 <Layout>
                   <MyHotels />
+                </Layout>
+              }
+            />
+
+            <Route 
+              path="/edit-hotel/:hotelId"
+              element= {
+                <Layout>
+                  <EditHotel />
                 </Layout>
               }
             />

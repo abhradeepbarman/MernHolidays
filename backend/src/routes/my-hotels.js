@@ -1,10 +1,11 @@
 const express = require("express")
-const { addHotel, getAllHotels } = require("../controllers/Hotel")
+const { addHotel, getAllHotels, getHotelDetails, uploadImages, updateHotel } = require("../controllers/Hotel")
 const { verifyToken } = require("../middleware/auth")
 const { body } = require("express-validator")
 const router = express.Router()
 
 const multer = require("multer")
+const Hotel = require("../models/Hotel")
 const storage = multer.memoryStorage()
 const upload = multer({
     storage: storage,
@@ -31,5 +32,9 @@ router.post("/", upload.array("imageFiles", 6), verifyToken, [
 ], addHotel)
 
 router.get("/", verifyToken, getAllHotels)
+
+router.get("/:id", verifyToken, getHotelDetails)
+
+router.put("/:hotelId", verifyToken, upload.array("imageFiles"), updateHotel)
 
 module.exports = router

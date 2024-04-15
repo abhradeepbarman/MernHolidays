@@ -1,11 +1,38 @@
 
-function ImagesSection({register, errors}) {
+function ImagesSection({register, errors, watch, setValue}) {
+
+    const existingImageUrls = watch("imageUrls")
+
+    const handleDelete = async(event, imageUrl) => {
+        event.preventDefault()
+        setValue("imageUrls", existingImageUrls.filter((url) => url !== imageUrl))
+    }
 
   return (
     <div>
         <h2 className="text-2xl font-bold mb-3">Images</h2>
 
         <div className="border rounded p-4 flex flex-col gap-4">
+            {
+                existingImageUrls && (
+                    <div className="grid grid-cols-6 gap-4">
+                        {
+                            existingImageUrls.map((url, index) => (
+                                <div className="relative group" key={index}>
+                                    <img src={url} className="min-h-full object-cover" />
+                                    
+                                    <button className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 text-white"
+                                        onClick={() => handleDelete(event, url)}
+                                    >
+                                        Delete
+                                    </button>
+                                </div>
+                            ))
+                        }
+                    </div>
+                )
+            }
+
             <input 
             type="file" 
             multiple
@@ -13,7 +40,7 @@ function ImagesSection({register, errors}) {
             className="w-full text-gray-700 font-normal"
             {...register("imageFiles", {
                 validate: (imageFiles) => {
-                    const totalLength = imageFiles.length
+                    const totalLength = imageFiles.length + (existingImageUrls?.length || 0)
 
                     if(totalLength === 0) {
                         return "Atleast one image should be added"

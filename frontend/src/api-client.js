@@ -164,3 +164,58 @@ export const fetchMyHotels = async() => {
     toast.dismiss(toastId)
     return result;
 }
+
+export const fetchMyHotelById = async(hotelId) => {
+    const toastId = toast.loading("Loading...")
+
+    try {
+        const response = await fetch(`${API_BASE_URL}/api/my-hotels/${hotelId}`, {
+            credentials: "include"
+        })
+        const result = await response.json()
+    
+        if(!response.ok) {
+            throw new Error("Error fetching Hotel")
+        }
+
+        console.log("result", result);
+    
+        return result;
+    } catch (error) {
+        console.log("FETCH HOTEL BY ID API ERROR");
+        console.log(error);
+    }
+
+    finally {
+        toast.dismiss(toastId)
+    }
+}
+
+export const updatedMyHotelById = async(hotelFormData, navigate) => {
+    const toastId = toast.loading("Loading...")
+    try {
+        const response = await fetch(`${API_BASE_URL}/api/my-hotels/${hotelFormData.get("hotelId")}`, {
+            method: "PUT",
+            credentials: "include",
+            body: hotelFormData,
+        })
+    
+        console.log("response", await response.json());
+    
+        if(!response.ok) {
+            throw new Error("Failed to update Hotel")
+        }
+
+        toast.success("Details Updated!")
+    
+        return response.json()
+    } catch (error) {
+        console.log("UPDATE HOTEL API ERROR");
+        console.log(error);
+    }
+
+    finally {
+        toast.dismiss(toastId)
+        navigate("/my-hotels")
+    }
+}
