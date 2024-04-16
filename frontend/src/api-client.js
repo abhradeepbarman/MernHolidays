@@ -219,3 +219,34 @@ export const updatedMyHotelById = async(hotelFormData, navigate) => {
         navigate("/my-hotels")
     }
 }
+
+export const searchHotels = async(searchParams) => {
+    const toastId = toast.loading("Loading..")
+
+    const queryParams = new URLSearchParams()
+    queryParams.append("destination", searchParams.destination || "")
+    queryParams.append("checkIn", searchParams.checkIn || "")
+    queryParams.append("checkOut", searchParams.checkOut || "")
+    queryParams.append("adultCount", searchParams.adultCount || "")
+    queryParams.append("childCount", searchParams.childCount || "")
+    queryParams.append("page", searchParams.page || "")
+
+    try {
+        const response = await fetch(`${API_BASE_URL}/api/hotels/search?${queryParams}`)
+        const result = await response.json()
+
+        if(!response.ok) {
+            toast.error("Error")
+            throw new Error("Error fetching Hotels!")
+        }
+
+        return result
+    } 
+    catch (error) {
+        console.log(error);
+    }
+
+    finally {
+        toast.dismiss(toastId)
+    }
+}

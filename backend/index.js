@@ -8,6 +8,7 @@ const cookieParser = require("cookie-parser")
 const path = require("path")
 const cloudinary = require('cloudinary').v2;
 const myHotelRoutes = require("./src/routes/my-hotels")
+const hotelRoutes = require("./src/routes/hotels")
 
 cloudinary.config({
     cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
@@ -33,6 +34,7 @@ app.use(cookieParser())
 app.use("/api/users", userRoutes)
 app.use("/api/auth", authRoutes)
 app.use("/api/my-hotels", myHotelRoutes)
+app.use("/api/hotels", hotelRoutes)
 
 const PORT = process.env.PORT
 app.listen(PORT, () => {

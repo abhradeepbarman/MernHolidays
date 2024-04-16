@@ -7,6 +7,7 @@ import { useSelector } from "react-redux"
 import AddHotel from "./pages/AddHotel"
 import MyHotels from "./pages/MyHotels"
 import EditHotel from "./pages/EditHotel"
+import Search from "./pages/Search"
 
 function App() {
   const {token} = useSelector((state) => state.auth)
@@ -18,8 +19,9 @@ function App() {
           <p>Home Page</p>
         </Layout>} />
 
-        <Route path="/search" element={<Layout>
-          <p>Search Page</p>
+        <Route path="/search" element={
+        <Layout>
+            <Search />
         </Layout>} />
         
         <Route 
@@ -65,6 +67,8 @@ function App() {
                 </Layout>
               }
             />
+
+
           </>  
           )
         }
