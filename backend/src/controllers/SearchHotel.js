@@ -1,4 +1,5 @@
 const Hotel = require("../models/Hotel")
+const {validationResult} = require("express-validator")
 
 exports.searchHotel = async(req, res) => {
    try {
@@ -100,3 +101,27 @@ const constructSearchQuery = (queryParams) => {
   
     return constructedQuery;
   };
+
+exports.searchHotelbyId = async(req, res) => {
+  const errors = validationResult(req);
+  if(!errors.isEmpty()) {
+    return res.status(400).json({
+      success: false,
+      errors: errors.array()
+    })
+  }
+
+  const id = req.params.id.toString()
+
+  try {
+    const hotel = await Hotel.findById(id)
+    res.json(hotel)
+  } 
+  catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      success: false,
+      message: "Internal Server Error"
+    })
+  }
+}

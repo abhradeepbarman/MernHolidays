@@ -90,7 +90,7 @@ function Search() {
         <div className="flex justify-between items-center">
           <span className="text-xl font-bold">
             {data?.pagination.total} Hotels found
-            {search.destination ? `in ${search.destination}` : ""}
+            {search.destination ? ` in ${search.destination}` : ""}
           </span>
 
           {/* SORT OPTIONS  */}

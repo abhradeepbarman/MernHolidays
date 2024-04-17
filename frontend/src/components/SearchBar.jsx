@@ -13,11 +13,11 @@ function SearchBar() {
     const navigate = useNavigate()
 
     
-    const [destination, setDestination] = useState(search.destination)
-    const [checkIn, setCheckIn] = useState(search?.checkIn)
-    const [checkOut, setCheckOut] = useState(search?.checkOut)
-    const [adultCount, setAdultCount] = useState(search.adultCount)
-    const [childCount, setChildCount] = useState(search.childCount)
+    const [destination, setDestination] = useState(search.destination || "")
+    const [checkIn, setCheckIn] = useState(search?.checkIn || new Date())
+    const [checkOut, setCheckOut] = useState(search?.checkOut || new Date())
+    const [adultCount, setAdultCount] = useState(search.adultCount || 1)
+    const [childCount, setChildCount] = useState(search.childCount || 0)
 
     const handleSubmit = (event) => {   
         event.preventDefault()
@@ -38,6 +38,14 @@ function SearchBar() {
     const minDate = new Date()
     const maxDate = new Date()
     maxDate.setFullYear(maxDate.getFullYear() + 1)
+
+    const handleClear = () => {
+        setDestination("");
+        setCheckIn(new Date());
+        setCheckOut(new Date());
+        setAdultCount(1);
+        setChildCount(0);
+    };
 
   return (
     <form onSubmit={handleSubmit} className="-mt-8 p-3 bg-orange-400 rounded shadow-md grid grid-cols-2 lg:grid-cols-3 2xl:grid-cols-5 items-center gap-4">
@@ -100,7 +108,7 @@ function SearchBar() {
                 Search
             </button>
 
-            <button className="w-1/3 bg-red-600 text-white h-full p-2 font-bold text-xl hover:bg-red-500">
+            <button className="w-1/3 bg-red-600 text-white h-full p-2 font-bold text-xl hover:bg-red-500" onClick={handleClear}>
                 Clear
             </button>
         </div>
