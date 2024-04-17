@@ -221,7 +221,6 @@ export const updatedMyHotelById = async(hotelFormData, navigate) => {
 }
 
 export const searchHotels = async(searchParams) => {
-    const toastId = toast.loading("Loading..")
 
     const queryParams = new URLSearchParams()
     queryParams.append("destination", searchParams.destination || "")
@@ -230,6 +229,21 @@ export const searchHotels = async(searchParams) => {
     queryParams.append("adultCount", searchParams.adultCount || "")
     queryParams.append("childCount", searchParams.childCount || "")
     queryParams.append("page", searchParams.page || "")
+
+    queryParams.append("maxPrice", searchParams.maxPrice || "")
+    queryParams.append("sortOptions", searchParams.sortOptions || "")
+
+    searchParams?.facilities?.forEach((facility) => 
+        queryParams.append("facilities", facility)
+    )
+
+    searchParams?.types?.forEach((type) => 
+        queryParams.append("types", type)
+    )
+
+    searchParams?.stars?.forEach((star) => 
+        queryParams.append("stars", star)
+    )
 
     try {
         const response = await fetch(`${API_BASE_URL}/api/hotels/search?${queryParams}`)
@@ -244,9 +258,5 @@ export const searchHotels = async(searchParams) => {
     } 
     catch (error) {
         console.log(error);
-    }
-
-    finally {
-        toast.dismiss(toastId)
     }
 }

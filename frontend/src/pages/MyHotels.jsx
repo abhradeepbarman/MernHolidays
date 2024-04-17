@@ -3,17 +3,22 @@ import { fetchMyHotels } from "../api-client"
 import { useEffect, useState } from "react"
 import {BsBuilding, BsMap} from "react-icons/bs"
 import {BiHotel, BiMoney, BiStar} from "react-icons/bi"
+import { useQuery } from "@tanstack/react-query"
 
 function MyHotels() {
 
-    const [hotels, setHotels] = useState(null)
+    const [hotels, setHotels] = useState([]);
+    const { data } = useQuery({
+        queryKey: ["fetchMyHotels", fetchMyHotels],
+        queryFn: () => fetchMyHotels()
+    });
 
     useEffect(() => {
-        fetchMyHotels()
-            .then((data) => setHotels(data.hotels))
-            .catch((error) => console.log(error))
-    }, [])
-
+        if (data) {
+        setHotels(data.hotels);
+        }
+    }, [data]);
+    
     if(!hotels) {
         return <span>No Hotels found</span>
     }
