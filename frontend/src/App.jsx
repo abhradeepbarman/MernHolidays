@@ -26,20 +26,20 @@ function App() {
         </Layout>} />
         
         <Route path="/detail/:hotelId" element={
-        <Layout>
+        <Layout showSearchBar={false}>
             <Details />
         </Layout>} />
 
         <Route 
           path="/register"
-          element={<Layout>
+          element={<Layout showSearchBar={false}>
             <Register />
           </Layout>}
         />
         
         <Route 
           path="/sign-in"
-          element={<Layout>
+          element={<Layout showSearchBar={false}>
             <SignIn />
           </Layout>}
         />

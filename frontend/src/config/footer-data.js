@@ -1,0 +1,53 @@
+export const footerData = [
+    [
+        "Countries",
+        "Regions",
+        "Cities",
+        "Districts",
+        "Airports",
+        "Hotels",
+        "Places of interest",
+    ],
+    [
+        "Homes",
+        "Apartments",
+        "Resorts",
+        "Villas",
+        "Hostels",
+        "B&Bs",
+        "Guest Houses",
+    ], 
+    [
+        "Unique places to stay",
+        "All destinations",
+        "All flight destinations",
+        "All car hire locations",
+        "All holiday destinations",
+        "Reviews",
+        "Discover monthly stays",
+        "Unpacked: Travel articles",
+        "Seasonal and holiday deals",
+        "Traveller Review Awards",
+    ],
+    [
+        "Car hire",
+        "Flight finder",
+        "Restaurant reservations",
+        "Booking.com for Travel Agents",
+    ],
+    [
+        "Coronavirus (COVID-19) FAQs",
+        "About Us",
+        "Customer Service help",
+        "Partner help",
+        "Careers",
+        "Sustainability",
+        "Press centre",
+        "Safety resource centre",
+        "Investor relations",
+        "Terms & Conditions",
+        "Partner dispute",
+        "How we work",
+    ]
+]
+

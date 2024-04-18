@@ -5,12 +5,12 @@ import SearchBar from "../components/SearchBar"
 
 
 // eslint-disable-next-line react/prop-types
-function Layout({children}) {
+function Layout({children, showSearchBar=true}) {
   return (
-    <div className="flex flex-col min-h-screen">
+    <div className={`flex flex-col min-h-screen`}>
         <Header />
         <Hero />
-        <div className="container mx-auto">
+        <div className={`container mx-auto ${showSearchBar ? "" : "hidden"}`}>
           <SearchBar />
         </div>
         <div className="container mx-auto py-10 flex-1">

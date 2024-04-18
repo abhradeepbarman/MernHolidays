@@ -270,3 +270,36 @@ export const fetchHotelById = async(hotelId) => {
 
     return response.json()
 }
+
+export const storeEmail = () => {
+    return async(email) => {
+        console.log(email);
+        try {
+            const response = await fetch(`${API_BASE_URL}/api/users/storeEmail`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                credentials: "include", // Ensure this aligns with your CORS policy and security requirements
+                body: JSON.stringify({
+                    email,
+                })
+            });
+
+            const result = await response.json()
+    
+            if(!response.ok) {
+                toast.error(result.message)
+                return;
+            }
+
+            toast.success(result.message);
+
+            return result
+        } 
+        catch (error) {
+            console.log("STORE EMAIL API ERROR");
+            console.log(error);
+        }
+    }
+}
