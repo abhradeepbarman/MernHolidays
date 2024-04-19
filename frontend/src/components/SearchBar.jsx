@@ -11,10 +11,9 @@ function SearchBar() {
     const search = useSelector((state) => state.search)
     const dispatch = useDispatch()
     const navigate = useNavigate()
-
     
     const [destination, setDestination] = useState(search.destination || "")
-    const [checkIn, setCheckIn] = useState(search?.checkIn || new Date())
+    const [checkIn, setCheckIn] = useState( search?.checkIn || new Date())
     const [checkOut, setCheckOut] = useState(search?.checkOut || new Date())
     const [adultCount, setAdultCount] = useState(search.adultCount || 1)
     const [childCount, setChildCount] = useState(search.childCount || 0)
@@ -26,8 +25,8 @@ function SearchBar() {
 
         dispatch(setSearchValues({
             destination, 
-            checkIn: checkIn.toISOString(), 
-            checkOut: checkOut.toISOString(), 
+            checkIn, 
+            checkOut, 
             adultCount, 
             childCount
         }))

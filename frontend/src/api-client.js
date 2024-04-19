@@ -1,5 +1,4 @@
 import {toast} from "react-hot-toast"
-import { setIsLoading } from "./Store/slices/authSlice";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -54,39 +53,21 @@ export const signout = async() => {
     return result
 }
 
-export const addMyHotel = async(formData, dispatch) => {
+export const addMyHotel = async(formData) => {
     const toastId = toast.loading("Loading...")
-    dispatch(setIsLoading(true))
 
-    try {
-        const response = await fetch(`${API_BASE_URL}/api/my-hotels`, {
-            method: "POST",
-            credentials: "include",
-            body: formData
-        })
+    const response = await fetch(`${API_BASE_URL}/api/my-hotels/addHotel`, {
+        method: "POST",
+        credentials: "include",
+        body: formData
+    })
 
-        console.log(response.json());
-
-
-        if(!response.ok) {
-            toast.error(Error);
-            throw new Error("Failed to add hotel!");
-        }
-
-        toast.success("Hotel added!")
-
-        return response.json();
-    } 
-    catch (error) {
-        console.log(error);
-        toast.error("Error")
-        console.log("ADD HOTELS API ERROR");
+    if(!response.ok) {
+        throw new Error("Failed to add hotel!");
     }
 
-    finally{
-        dispatch(setIsLoading(false))
-        toast.dismiss(toastId)
-    }
+    toast.dismiss(toastId)
+    return response.json();
 }
 
 export const fetchMyHotels = async() => {

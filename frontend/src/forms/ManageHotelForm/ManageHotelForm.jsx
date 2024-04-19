@@ -4,12 +4,10 @@ import HotelTypesSection from "./HotelTypesSection"
 import FacilitiesSection from "./FacilitiesSection"
 import GuestsSection from "./GuestsSection"
 import ImagesSection from "./ImagesSection"
-import {useSelector} from "react-redux"
 import { useEffect } from "react"
 
 
-const ManageHotelForm = ({onSave, hotel}) => {
-    const {isLoading} = useSelector((state) => state.auth)
+const ManageHotelForm = ({onSave, isLoading, hotel}) => {
 
     const {
         register,
@@ -25,7 +23,6 @@ const ManageHotelForm = ({onSave, hotel}) => {
     }, [hotel, reset])
 
     
-
     const onsubmit = (data) => {
       console.log("form data -->",data);
       const formData = new FormData()
@@ -59,6 +56,8 @@ const ManageHotelForm = ({onSave, hotel}) => {
       })
       
       onSave(formData)
+
+      reset()
     }
 
   return (

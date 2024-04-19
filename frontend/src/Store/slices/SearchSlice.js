@@ -4,8 +4,8 @@ export const searchSlice = createSlice({
     name: "search",
     initialState: {
         destination: sessionStorage.getItem("destination") || "",
-        checkIn: new Date(sessionStorage.getItem("checkIn")) || new Date().toISOString(),
-        checkOut: new Date(sessionStorage.getItem("checkOut")) || new Date().toISOString(),
+        checkIn: sessionStorage.getItem("checkIn") || new Date(),
+        checkOut: sessionStorage.getItem("checkOut") || new Date(),
         adultCount: parseInt(sessionStorage.getItem("adultCount")) || 1,
         childCount: parseInt(sessionStorage.getItem("childCount")) || 0,
         hotelId: sessionStorage.getItem("hotelId") || ""
@@ -23,8 +23,8 @@ export const searchSlice = createSlice({
             }
 
             sessionStorage.setItem("destination", destination)  
-            sessionStorage.setItem("checkIn", checkIn)  
-            sessionStorage.setItem("checkOut", checkOut)  
+            sessionStorage.setItem("checkIn", checkIn.toISOString())  
+            sessionStorage.setItem("checkOut", checkOut.toISOString())  
             sessionStorage.setItem("adultCount", adultCount.toString())  
             sessionStorage.setItem("childCount", childCount.toString())  
 

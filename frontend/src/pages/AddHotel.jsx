@@ -1,18 +1,26 @@
-import { useDispatch } from "react-redux";
 import { addMyHotel } from "../api-client";
 import ManageHotelForm from "../forms/ManageHotelForm/ManageHotelForm"
+import { useMutation } from '@tanstack/react-query';
+import toast from "react-hot-toast";
 
 
 function AddHotel() {
-  const dispatch = useDispatch();
+
+  const { mutate, isLoading } = useMutation({
+    mutationFn: addMyHotel,
+    onSuccess: () => toast.success("Hotel added"),
+    onError: (err) => {
+      toast.error(err.message)
+      toast.dismiss()
+    } 
+  })
 
   const handleSave = (formData) => {
-    console.log("inside handle save", formData);
-    addMyHotel(formData, dispatch);
+    mutate(formData);
   }
 
   return (
-    <ManageHotelForm onSave={handleSave} />
+    <ManageHotelForm onSave={handleSave} isLoading={isLoading} />
   )
 }
 
