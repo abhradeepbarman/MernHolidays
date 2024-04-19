@@ -1,4 +1,5 @@
-const emailModel = require("../models/Email")
+const emailModel = require("../models/Email");
+const User = require("../models/User");
 
 exports.storeEmail = async(req, res) => {
     const {email} = req.body;
@@ -27,6 +28,32 @@ exports.storeEmail = async(req, res) => {
         return res.status(200).json({
             success: true,
             message: "Email Registered!"
+        })
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({
+            success: false,
+            message: "Internal Server error",
+        })
+    }
+}
+
+exports.getCurrentUser = async(req, res) => {
+    const userId = req.userId;
+
+    try {
+        const user = await User.findById(userId).select("-password")
+        if(!user) {
+            return res.status(400).json({
+                success: false,
+                message: "User not found",
+            })
+        }
+
+        return res.status(200).json({
+            success: true,
+            message: "user found",
+            user,
         })
     } catch (error) {
         console.log(error);

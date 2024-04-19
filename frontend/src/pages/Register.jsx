@@ -1,12 +1,13 @@
 import {useForm} from "react-hook-form"
 import {useNavigate} from "react-router-dom"
-import { useDispatch } from "react-redux"
-import * as apiClient from "../api-client"
+import { QueryClient, useMutation } from '@tanstack/react-query';
+import toast from "react-hot-toast";
+import { register as signup } from "../api-client";
 
 function Register() {
 
+    const queryClient = new QueryClient()
     const navigate = useNavigate();
-    const dispatch = useDispatch();
 
     const { 
       register,
@@ -16,8 +17,21 @@ function Register() {
       setValue,
     } = useForm();
 
+
+    const mutation = useMutation({
+      mutationFn: signup,
+      onSuccess: async() => {
+        toast.success("Registration success")
+        await queryClient.invalidateQueries("validateToken")
+        navigate("/sign-in")
+      },
+      onError: (error) => {
+        toast.error(error.message)
+      }
+    })
+
     const onsubmit = async(data) => {
-      apiClient.register(data, dispatch, navigate);
+      mutation.mutate(data)
 
        //clear the form
        setValue("firstName", "");

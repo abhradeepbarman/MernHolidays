@@ -54,7 +54,7 @@ function Details() {
         <div className="grid grid-cols-1 lg:grid-cols-[2fr_1fr]">
             <div className="whitespace-pre-line">{data.description}</div>
             <div className="h-fit">
-                <GuestInfoForm pricePerNight={data?.pricePerNight} />
+                <GuestInfoForm hotelId={hotelId} pricePerNight={data?.pricePerNight} />
             </div>
         </div>
     </div>

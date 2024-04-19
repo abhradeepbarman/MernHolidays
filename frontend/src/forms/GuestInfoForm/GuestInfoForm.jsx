@@ -12,6 +12,7 @@ function GuestInfoForm({hotelId, pricePerNight}) {
     const dispatch = useDispatch()
 
     const onsubmit = (data) => {
+        console.log(data);
         const {checkIn, checkOut, adultCount, childCount} = data;
         
         dispatch(setSearchValues({
@@ -42,7 +43,7 @@ function GuestInfoForm({hotelId, pricePerNight}) {
     <div className="flex flex-col p-4 bg-blue-200 gap-4">
         <h3 className="text-xl font-bold">₹ {pricePerNight}</h3>
 
-        <form onSubmit={token ?? handleSubmit(onsubmit)}>
+        <form onSubmit={handleSubmit(onsubmit)}>
             <div className="grid grid-cols-1 gap-4 items-center">
                 <div>
                     <DatePicker

@@ -4,17 +4,17 @@ const { validationResult } = require("express-validator")
 const jwt = require("jsonwebtoken")
 
 exports.register = async(req, res) => {
+    
+    const {email, password, firstName, lastName} = req.body
+
+    if(!email || !password || !firstName || !lastName) {
+        return res.status(400).json({
+            success: false,
+            message: "All the fields are required"
+        })
+    }
+
     try {
-        const errors = validationResult(req);
-        if(!errors.isEmpty()) {
-            return res.status(400).json({
-                success: false,
-                message: errors.array(),
-            })
-        }
-
-        const {email, password, firstName, lastName} = req.body
-
         //check user exists or not
         let user = await User.findOne({email: email})
         
@@ -53,16 +53,14 @@ exports.register = async(req, res) => {
 }   
 
 exports.login = async(req, res) => {
-    //check for error
-    const errors = validationResult(req)
-    if(!errors.isEmpty()) {
+    const {email, password} = req.body;
+
+    if(!email || !password) {
         return res.status(400).json({
             success: false,
-            message: errors.array()
+            message: "All fields are required",
         })
     }
-
-    const {email, password} = req.body;
 
     try {
         const user = await User.findOne({email})
@@ -70,7 +68,7 @@ exports.login = async(req, res) => {
         if(!user) {
             return res.status(400).json({
                 success: false,
-                message: "User not found"
+                message: "User not registered"
             })
         }
 
@@ -107,4 +105,15 @@ exports.login = async(req, res) => {
             message: "Internal server error"
         })
     }
+}
+
+exports.logout = async(req, res) => {
+    res.cookie("auth_token", "", {
+        expires: new Date(0)
+    })
+
+    return res.status(200).json({
+        success: true,
+        message: "User succesfully logged out",
+    })
 }

@@ -1,7 +1,13 @@
 import { useForm } from "react-hook-form"
-import * as apiClient from "../api-client"
 import {Link, useNavigate} from "react-router-dom"
-import {useDispatch} from "react-redux"
+import { signIn } from "../api-client";
+import { QueryClient, useMutation } from '@tanstack/react-query';
+import toast from "react-hot-toast";
+import { useDispatch } from 'react-redux';
+import { setToken } from "../Store/slices/authSlice";
+
+
+const queryClient = new QueryClient()
 
 function SignIn() {
     const navigate = useNavigate();
@@ -14,9 +20,33 @@ function SignIn() {
         setValue
     } = useForm()
 
-    const onsubmit = async(data) => {
-      apiClient.signIn(data, dispatch, navigate);
+    const mutation = useMutation({
+      mutationFn: signIn,
+      onSuccess: async(data) => {
+            
+        //store token in the state & local storage
+        localStorage.setItem("auth_token", data.token)
+        dispatch(setToken(data.token))
+        
+        //store user Id in state & local storage
+        localStorage.setItem("userId", data.userId)
+        dispatch(setToken(data.userId))
 
+        await queryClient.invalidateQueries("validateToken"),
+
+        toast.success("Sign in Successful!")
+        navigate("/")
+      },
+      onError: (error) => {
+        toast.error(error.message)
+      }
+    })
+
+
+    const onsubmit = async(data) => {
+      mutation.mutate(data)
+
+      //clear the form
       setValue("email", "")
       setValue("password", "")
     }

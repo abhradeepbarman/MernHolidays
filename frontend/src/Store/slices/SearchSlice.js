@@ -3,12 +3,12 @@ import { createSlice } from "@reduxjs/toolkit";
 export const searchSlice = createSlice({
     name: "search",
     initialState: {
-        destination: "",
-        checkIn: new Date(),
-        checkOut: new Date(),
-        adultCount: 1,
-        childCount: 0,
-        hotelId: ""
+        destination: sessionStorage.getItem("destination") || "",
+        checkIn: new Date(sessionStorage.getItem("checkIn")) || new Date().toISOString(),
+        checkOut: new Date(sessionStorage.getItem("checkOut")) || new Date().toISOString(),
+        adultCount: parseInt(sessionStorage.getItem("adultCount")) || 1,
+        childCount: parseInt(sessionStorage.getItem("childCount")) || 0,
+        hotelId: sessionStorage.getItem("hotelId") || ""
     },
     reducers: {
         setSearchValues: (state, action) => {
@@ -20,6 +20,16 @@ export const searchSlice = createSlice({
             state.childCount = childCount;
             if(hotelId) {
                 state.hotelId = hotelId
+            }
+
+            sessionStorage.setItem("destination", destination)  
+            sessionStorage.setItem("checkIn", checkIn)  
+            sessionStorage.setItem("checkOut", checkOut)  
+            sessionStorage.setItem("adultCount", adultCount.toString())  
+            sessionStorage.setItem("childCount", childCount.toString())  
+
+            if(hotelId) {
+                sessionStorage.setItem("hotelId", hotelId)
             }
         }
     }
