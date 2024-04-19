@@ -1,6 +1,6 @@
 const express = require("express")
 const router = express.Router()
-const { addHotel, getAllHotels, getHotelDetails, uploadImages, updateHotel } = require("../controllers/MyHotel")
+const { addHotel, getHotelDetails, uploadImages, updateHotel, getMyHotels } = require("../controllers/MyHotel")
 const { verifyToken } = require("../middleware/auth")
 
 
@@ -14,8 +14,8 @@ const upload = multer({
 })
 
 router.post("/addHotel", upload.array("imageFiles", 6), verifyToken , addHotel)
-router.get("/", verifyToken, getAllHotels)
-router.get("/:id", verifyToken, getHotelDetails)
-router.put("/:hotelId", verifyToken, updateHotel)
+router.get("/getMyHotels", verifyToken, getMyHotels)
+router.get("/:hotelId", verifyToken, getHotelDetails)
+router.put("/edit/:hotelId", upload.array("imageFiles"), verifyToken, updateHotel)
 
 module.exports = router

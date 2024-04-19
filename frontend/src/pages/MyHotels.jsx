@@ -1,24 +1,21 @@
 import {Link} from "react-router-dom"
 import { fetchMyHotels } from "../api-client"
-import { useEffect, useState } from "react"
 import {BsBuilding, BsMap} from "react-icons/bs"
 import {BiHotel, BiMoney, BiStar} from "react-icons/bi"
 import { useQuery } from "@tanstack/react-query"
+import toast from "react-hot-toast"
 
 function MyHotels() {
 
-    const [hotels, setHotels] = useState([]);
-    const { data } = useQuery({
-        queryKey: ["fetchMyHotels", fetchMyHotels],
-        queryFn: () => fetchMyHotels()
+    const { data: hotels, isError } = useQuery({
+        queryKey: ["fetchMyHotels"],
+        queryFn: fetchMyHotels 
     });
 
-    useEffect(() => {
-        if (data) {
-        setHotels(data.hotels);
-        }
-    }, [data]);
-    
+    if(isError) {
+        toast.error("Error")
+    }
+
     if(!hotels) {
         return <span>No Hotels found</span>
     }

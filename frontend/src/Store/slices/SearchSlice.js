@@ -23,8 +23,8 @@ export const searchSlice = createSlice({
             }
 
             sessionStorage.setItem("destination", destination)  
-            sessionStorage.setItem("checkIn", checkIn.toISOString())  
-            sessionStorage.setItem("checkOut", checkOut.toISOString())  
+            sessionStorage.setItem("checkIn", checkIn)  
+            sessionStorage.setItem("checkOut", checkOut)  
             sessionStorage.setItem("adultCount", adultCount.toString())  
             sessionStorage.setItem("childCount", childCount.toString())  
 

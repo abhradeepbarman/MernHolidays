@@ -71,52 +71,35 @@ export const addMyHotel = async(formData) => {
 }
 
 export const fetchMyHotels = async() => {
-    const toastId = toast.loading("Loading...")
-    const response = await fetch(`${API_BASE_URL}/api/my-hotels`, {
+    const response = await fetch(`${API_BASE_URL}/api/my-hotels/getMyHotels`, {
         credentials: "include",
     })
-
-    const result = await response.json()
-    console.log(result);
 
     if(!response.ok) {
         throw new Error("Error fetching Hotels");
     }
 
-    toast.dismiss(toastId)
-    return result;
+    const result = await response.json()
+    return result
 }
 
 export const fetchMyHotelById = async(hotelId) => {
-    const toastId = toast.loading("Loading...")
+    const response = await fetch(`${API_BASE_URL}/api/my-hotels/${hotelId}`, {
+        credentials: "include"
+    })
 
-    try {
-        const response = await fetch(`${API_BASE_URL}/api/my-hotels/${hotelId}`, {
-            credentials: "include"
-        })
-        const result = await response.json()
-    
-        if(!response.ok) {
-            throw new Error("Error fetching Hotel")
-        }
-
-        console.log("result", result);
-    
-        return result;
-    } catch (error) {
-        console.log("FETCH HOTEL BY ID API ERROR");
-        console.log(error);
+    if(!response.ok) {
+        throw new Error("Error fetching Hotel")
     }
 
-    finally {
-        toast.dismiss(toastId)
-    }
+    const result = await response.json()
+    return result;
 }
 
 export const updatedMyHotelById = async(hotelFormData, navigate) => {
     const toastId = toast.loading("Loading...")
     try {
-        const response = await fetch(`${API_BASE_URL}/api/my-hotels/${hotelFormData.get("hotelId")}`, {
+        const response = await fetch(`${API_BASE_URL}/api/my-hotels/edit/${hotelFormData.get("hotelId")}`, {
             method: "PUT",
             credentials: "include",
             body: hotelFormData,
@@ -167,20 +150,16 @@ export const searchHotels = async(searchParams) => {
         queryParams.append("stars", star)
     )
 
-    try {
-        const response = await fetch(`${API_BASE_URL}/api/hotels/search?${queryParams}`)
-        const result = await response.json()
+    const response = await fetch(
+        `${API_BASE_URL}/api/hotels/search?${queryParams}`
+    )
 
-        if(!response.ok) {
-            toast.error("Error")
-            throw new Error("Error fetching Hotels!")
-        }
-
-        return result
-    } 
-    catch (error) {
-        console.log(error);
+    if(!response.ok) {
+        throw new Error("Error fetching hotels");
     }
+
+    const result = await response.json()
+    return result
 }
 
 export const fetchHotelById = async(hotelId) => {

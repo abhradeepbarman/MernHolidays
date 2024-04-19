@@ -51,7 +51,7 @@ function App() {
             <Route  
               path="/add-hotel"
               element={
-                <Layout>
+                <Layout showSearchBar={false}>
                   <AddHotel />
                 </Layout>
               }

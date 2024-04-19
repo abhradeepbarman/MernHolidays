@@ -65,18 +65,13 @@ exports.addHotel = async(req, res) => {
     } 
 }
 
-exports.getAllHotels = async(req, res) => {
-
+exports.getMyHotels = async(req, res) => {
     try {
         const hotels = await Hotel.find({
             userId: req.userId
         })
         
-        return res.status(200).json({
-            success: true,
-            message: "Hotels fetched successfully",
-            hotels
-        })
+        res.send(hotels)
     } catch (error) {
         return res.status(500).json({
             success: false,
@@ -86,15 +81,15 @@ exports.getAllHotels = async(req, res) => {
 }
 
 exports.getHotelDetails = async(req, res) => {
-    const {id} = req.params
+    const {hotelId} = req.params
 
     try {
         const hotel = await Hotel.findOne({
-            _id: id,
+            _id: hotelId,
             userId: req.userId,
         })
 
-        res.json(hotel);
+        res.send(hotel);
     } 
     catch (error) {
         console.log(error);
@@ -106,12 +101,15 @@ exports.getHotelDetails = async(req, res) => {
 }
 
 exports.updateHotel = async(req, res) => {
+    const {hotelId} = req.params;
+
     try {
         const updatedHotel = req.body
         updatedHotel.lastUpdated = new Date()
 
         const hotel = await Hotel.findOneAndUpdate({
-            _id: req.params.hotelId,
+            _id: hotelId,
+            userId: req.userId,
         }, 
         updatedHotel, 
         { new: true})
@@ -127,7 +125,10 @@ exports.updateHotel = async(req, res) => {
         const files = req.files
         const updatedImageUrls = await uploadImages(files)
 
-        hotel.imageUrls = [...updatedImageUrls, ...(updatedHotel.imageUrls || [])]
+        hotel.imageUrls = [
+            ...updatedImageUrls, 
+            ...(updatedHotel.imageUrls || [])
+        ]
 
         await hotel.save()
         return res.status(201).json(hotel)

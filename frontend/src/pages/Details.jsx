@@ -7,7 +7,10 @@ import GuestInfoForm from "../forms/GuestInfoForm/GuestInfoForm"
 function Details() {
     const { hotelId } = useParams()
     
-    const {data} = useQuery({queryKey: ["fetchHotelById"], queryFn: () => fetchHotelById(hotelId) })
+    const {data} = useQuery({
+        queryKey: ["fetchHotelById"], 
+        queryFn: () => fetchHotelById(hotelId) 
+    })
 
 
     if(!data) {

@@ -21,8 +21,6 @@ function SearchBar() {
     const handleSubmit = (event) => {   
         event.preventDefault()
 
-        console.log(destination, checkIn, checkOut, adultCount, childCount);
-
         dispatch(setSearchValues({
             destination, 
             checkIn, 
