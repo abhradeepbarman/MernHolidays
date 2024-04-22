@@ -4,8 +4,8 @@ export const searchSlice = createSlice({
     name: "search",
     initialState: {
         destination: sessionStorage.getItem("destination") || "",
-        checkIn: sessionStorage.getItem("checkIn") || new Date(),
-        checkOut: sessionStorage.getItem("checkOut") || new Date(),
+        checkIn: sessionStorage.getItem("checkIn") ? new Date(sessionStorage.getItem("checkIn")) : new Date(),
+        checkOut: sessionStorage.getItem("checkOut") ? new Date(sessionStorage.getItem("checkOut")) : new Date(),
         adultCount: parseInt(sessionStorage.getItem("adultCount")) || 1,
         childCount: parseInt(sessionStorage.getItem("childCount")) || 0,
         hotelId: sessionStorage.getItem("hotelId") || ""
@@ -13,6 +13,7 @@ export const searchSlice = createSlice({
     reducers: {
         setSearchValues: (state, action) => {
             const { destination, checkIn, checkOut, adultCount, childCount, hotelId } = action.payload;
+            
             state.destination = destination;
             state.checkIn = checkIn;
             state.checkOut = checkOut;

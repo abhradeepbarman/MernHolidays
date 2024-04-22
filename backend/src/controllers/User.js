@@ -50,11 +50,7 @@ exports.getCurrentUser = async(req, res) => {
             })
         }
 
-        return res.status(200).json({
-            success: true,
-            message: "user found",
-            user,
-        })
+        return res.json(user)
     } catch (error) {
         console.log(error);
         return res.status(500).json({

@@ -64,8 +64,6 @@ function Search() {
     };
     
     const { data } = useQuery({ queryKey: ["searchHotels", searchParams], queryFn: () => searchHotels(searchParams) });
-
-    console.log(data);
     
   return (
     <div className="grid grid-cols-1 lg:grid-cols-[250px_1fr] gap-5">

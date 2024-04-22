@@ -72,7 +72,7 @@ function GuestInfoForm({hotelId, pricePerNight}) {
                         minDate={checkIn}
                         maxDate={maxDate}
                         dateFormat="dd-MM-yyyy"
-                        placeholderText="Check-in Date"
+                        placeholderText="Check-out Date"
                         className="min-w-full bg-white p-2 focus:outline-none "
                         wrapperClassName="min-w-full"
                     />
@@ -94,6 +94,10 @@ function GuestInfoForm({hotelId, pricePerNight}) {
                             })}
                         />
                     </label>
+                    <span className="text-red-500 font-semibold text-sm">
+                        {errors.adultCount && errors.adultCount.message}
+                    </span>
+
 
                     <label className="flex items-center">
                         Children:
