@@ -1,4 +1,6 @@
 const Hotel = require("../models/Hotel")
+const Stripe = require("stripe")
+const stripe = new Stripe(process.env.STRIPE_API_KEY)
 
 const constructSearchQuery = (queryParams) => {
   let constructedQuery = {};
@@ -128,6 +130,112 @@ exports.searchHotelbyId = async(req, res) => {
     return res.status(500).json({
       success: false,
       message: "Internal Server Error"
+    })
+  }
+}
+
+exports.createPaymentIntent = async (req, res) => {
+  const { numberOfNights } = req.body;
+  const hotelId = req.params.hotelId;
+
+  const hotel = await Hotel.findById(hotelId);
+  if (!hotel) {
+    return res.status(400).json({
+      success: false,
+      message: "Hotel not found"
+    });
+  }
+
+  const totalCost = parseInt(hotel.pricePerNight) * numberOfNights;
+
+  const minimumChargeAmount = 100; // Adjust this according to the minimum charge amount for INR
+
+  if (totalCost < minimumChargeAmount) {
+    return res.status(400).json({
+      success: false,
+      message: "The total cost is below the minimum charge amount allowed for INR."
+    });
+  }
+
+  const paymentIntent = await stripe.paymentIntents.create({
+    amount: totalCost,
+    currency: "inr",
+    metadata: {
+      hotelId,
+      userId: req.userId,
+    }
+  });
+
+  if (!paymentIntent.client_secret) {
+    return res.status(500).json({
+      success: false,
+      message: "Error creating payment intent",
+    });
+  }
+
+  const response = {
+    paymentIntentId: paymentIntent.id,
+    clientSecret: paymentIntent.client_secret.toString(),
+    totalCost
+  };
+
+  res.send(response);
+}
+
+exports.createHotelBooking = async(req, res) => {
+  try {
+    const paymentIntentId = req.body.paymentIntentId
+    
+    const paymentIntent = await stripe.paymentIntents.retrieve(paymentIntentId)
+
+    if(!paymentIntent) {
+      return res.status(400).json({
+        success: false,
+        message: "Payment intent not found",
+      })
+    }
+
+    if(paymentIntent.metadata.hotelId !== req.params.hotelId ||
+        paymentIntent.metadata.userId !== req.body.userId) {
+          return res.status(400).json({
+            success: false,
+            message: "Payment intent mismatch",
+          })
+    }
+
+    if(paymentIntent.status !== "succeeded") {
+      return res.status(400).json({
+        success: false,
+        message: `payment intent not succeeded. Status: ${paymentIntent.status}`
+      })
+    }
+
+    const newBooking = {
+      ...req.body,
+      userId: req.userId
+    }
+
+    const hotel = await Hotel.findOne({_id: req.params.hotelId}, {
+      $push : {
+        bookings: newBooking
+      }
+    })
+
+    if(!hotel) {
+      return res.status(400).json({
+        success: false,
+        message: "Hotel not found",
+      })
+    }
+
+    await hotel.save()
+    return res.status(200).send()
+  } 
+  catch (error) {
+    console.log(error);
+    res.status(500).json({
+      success: false,
+      message: "Internal server error",
     })
   }
 }
