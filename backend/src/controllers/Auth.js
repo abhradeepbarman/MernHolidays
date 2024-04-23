@@ -16,7 +16,7 @@ exports.register = async(req, res) => {
 
     try {
         //check user exists or not
-        let user = await User.findOne({email: email})
+        let user = await User.findOne({email})
         
         //user already registered, do not need to register
         if(user) {
@@ -40,7 +40,6 @@ exports.register = async(req, res) => {
         return res.status(200).send({ 
             success: true,
             message: "User registered",
-            userId: newUser._id, 
         });
     } 
     catch (error) {

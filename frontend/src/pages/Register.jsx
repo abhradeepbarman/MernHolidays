@@ -1,12 +1,11 @@
 import {useForm} from "react-hook-form"
 import {useNavigate} from "react-router-dom"
-import { QueryClient, useMutation } from '@tanstack/react-query';
+import { useMutation } from '@tanstack/react-query';
 import toast from "react-hot-toast";
 import { register as signup } from "../api-client";
 
 function Register() {
 
-    const queryClient = new QueryClient()
     const navigate = useNavigate();
 
     const { 
@@ -22,7 +21,6 @@ function Register() {
       mutationFn: signup,
       onSuccess: async() => {
         toast.success("Registration success")
-        await queryClient.invalidateQueries("validateToken")
         navigate("/sign-in")
       },
       onError: (error) => {
