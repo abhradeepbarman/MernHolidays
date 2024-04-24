@@ -9,6 +9,7 @@ const path = require("path")
 const cloudinary = require('cloudinary').v2;
 const myHotelRoutes = require("./src/routes/my-hotels")
 const hotelRoutes = require("./src/routes/hotels")
+const bookingRoutes = require("./src/routes/my-bookings")
 
 cloudinary.config({
     cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
@@ -35,6 +36,7 @@ app.use("/api/auth", authRoutes)
 app.use("/api/my-hotels", myHotelRoutes)
 app.use("/api/users", userRoutes)
 app.use("/api/hotels", hotelRoutes)
+app.use("/api/my-bookings", bookingRoutes)
 
 const PORT = process.env.PORT
 app.listen(PORT, () => {

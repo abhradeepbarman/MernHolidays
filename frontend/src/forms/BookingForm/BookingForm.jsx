@@ -13,7 +13,7 @@ function BookingForm({currentUser, paymentIntent}) {
     const search = useSelector((state) => state.search)
     const {hotelId} = useParams()
 
-    const { mutate: bookRoom, isLoading} = useMutation({
+    const { mutate: bookRoom, isPending } = useMutation({
       mutationFn: createRoomBooking,
       onSuccess: () => {
         toast.success("Booking saved!")
@@ -123,13 +123,11 @@ function BookingForm({currentUser, paymentIntent}) {
 
       <div className='flex justify-end'>
         <button 
-          disabled={isLoading}
+          disabled={isPending}
           type='submit' 
           className='bg-blue-600 text-white p-2 font-bold hover:bg-blue-500 text-md disabled:bg-gray-500'
         >
-          {
-            isLoading ? "Saving..." : "Confirm Booking"
-          }
+          { isPending ? "Saving..." : "Confirm Booking" }
         </button>
       </div>
     </form>

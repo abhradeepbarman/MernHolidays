@@ -274,3 +274,17 @@ exports.createHotelBooking = async(req, res) => {
     })
   }
 }
+
+exports.getLatestHotels = async(req, res) => {
+  try {
+    const hotels = await Hotel.find().sort("-lastUpdated")
+    res.json(hotels)
+  } 
+  catch (error) {
+    console.log("error");
+    return res.status(500).json({
+      success: false,
+      message: "Internal server error",
+    })
+  }
+}

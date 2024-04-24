@@ -10,6 +10,8 @@ import EditHotel from "./pages/EditHotel"
 import Search from "./pages/Search"
 import Details from "./pages/Details"
 import Booking from "./pages/Booking"
+import MyBookings from './pages/MyBookings';
+import Home from "./pages/Home"
 
 function App() {
   const {token} = useSelector((state) => state.auth)
@@ -18,7 +20,7 @@ function App() {
     <div>
       <Routes>
         <Route path="/" element={<Layout>
-          <p>Home Page</p>
+          <Home />
         </Layout>} />
 
         <Route path="/search" element={
@@ -80,6 +82,15 @@ function App() {
               element={
                 <Layout>
                   <Booking showSearchBar={false} />
+                </Layout>
+              }
+            />
+
+            <Route  
+              path="/my-bookings"
+              element={
+                <Layout>
+                  <MyBookings />
                 </Layout>
               }
             />
