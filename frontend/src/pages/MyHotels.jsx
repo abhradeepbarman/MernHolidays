@@ -34,11 +34,18 @@ function MyHotels() {
                 hotels.map((hotel, index) => (
                     <div key={index} className="flex flex-col justify-between border border-slate-300 rounded-lg p-8 gap-5">
                         <h2 className="text-2xl font-bold">{hotel.name}</h2>
-                        <div className="whitespace-pre-line">{hotel.description}</div>
+                        
+                        <div className="whitespace-pre-line">
+                            {
+                                hotel.description.split(" ").length > 70 
+                                ? `${hotel.description.split(" ").slice(0, 70).join(" ")}...`
+                                :  hotel.description
+                            }
+                        </div>
 
                         <div className="grid grid-cols-5 gap-2">
                             <div className="border border-slate-300 rounded-sm p-3 flex items-center gap-2">
-                                <BsMap className="mr-1" fontSize={28} />
+                                <BsMap className="mr-1" />
                                 {hotel.city}, {hotel.country}
                             </div>
 
@@ -52,9 +59,9 @@ function MyHotels() {
                                 ₹ {hotel.pricePerNight} per Night
                             </div>
 
-                            <div className="border border-slate-300 rounded-sm p-3 flex items-center gap-2">
-                                <BiHotel className="mr-1" fontSize={28} />
-                                {hotel.adultCount} adults, {hotel.childCount} children
+                            <div className="border border-slate-300 rounded-sm p-3 flex items-center gap-5">
+                                <BiHotel className="mr-1" fontSize={24} />
+                                {hotel.adultCount} adults, <br/> {hotel.childCount} children
                             </div>
 
                             <div className="border border-slate-300 rounded-sm p-3 flex items-center gap-2">

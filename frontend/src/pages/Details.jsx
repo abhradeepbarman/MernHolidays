@@ -19,16 +19,25 @@ function Details() {
 
   return (
     <div className="space-y-6">
-        <div>
-            <span className="flex">
-                {
-                    Array.from({ length: data?.starRating }).map((index) => (
-                        <AiFillStar className="fill-yellow-400" key={index} />
-                    ))
-                }
-            </span>
+        
+        <div className="space-y-2">
+            <div className="flex gap-2 items-center">
+                <span className="flex">
+                    {
+                        Array.from({ length: data?.starRating }).map((index) => (
+                            <AiFillStar className="fill-yellow-400" key={index} />
+                        ))
+                    }
 
-            <h1 className="text-3xl font-bold">{data.name}</h1>
+                </span>
+
+                <span className="font-semibold">( {data?.starRating} Stars )</span>
+            </div>
+            
+            <div>
+                <h1 className="text-3xl font-bold">{data.name}</h1>
+                <span>{data?.city}, {data?.country}</span>
+            </div>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
@@ -54,8 +63,11 @@ function Details() {
             }
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-[2fr_1fr]">
-            <div className="whitespace-pre-line">{data.description}</div>
+        <div className="grid grid-cols-1 lg:grid-cols-[2fr_1fr] gap-10">
+            <div className="whitespace-pre-line text-justify">
+                {data.description}
+            </div>
+
             <div className="h-fit">
                 <GuestInfoForm hotelId={hotelId} pricePerNight={data?.pricePerNight} />
             </div>

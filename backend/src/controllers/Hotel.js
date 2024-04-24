@@ -158,7 +158,7 @@ exports.createPaymentIntent = async (req, res) => {
 
     const totalCost = parseInt(hotel.pricePerNight) * numberOfNights;
 
-    const minimumChargeAmount = 100; // Adjust this according to the minimum charge amount for INR
+    const minimumChargeAmount = 0; // Adjust this according to the minimum charge amount for INR
 
     if (totalCost < minimumChargeAmount) {
       return res.status(400).json({
