@@ -1,5 +1,5 @@
 import { useForm } from "react-hook-form"
-import {Link, useNavigate} from "react-router-dom"
+import {Link, useLocation, useNavigate} from "react-router-dom"
 import { signIn } from "../api-client";
 import { QueryClient, useMutation } from '@tanstack/react-query';
 import toast from "react-hot-toast";
@@ -12,6 +12,7 @@ const queryClient = new QueryClient()
 function SignIn() {
     const navigate = useNavigate();
     const dispatch = useDispatch()
+    const location = useLocation()
 
     const {
         register,
@@ -35,7 +36,7 @@ function SignIn() {
         await queryClient.invalidateQueries("validateToken"),
 
         toast.success("Sign in Successful!")
-        navigate("/")
+        navigate( location?.state?.from?.pathname || "/")
       },
       onError: (error) => {
         toast.error(error.message)

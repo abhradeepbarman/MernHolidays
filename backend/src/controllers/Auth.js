@@ -81,20 +81,24 @@ exports.login = async(req, res) => {
 
         //create token
         const payload = {
-            userId: user._id
+            userId: user._id,
+            email: user.email
         }
 
         const token = jwt.sign(payload, process.env.JWT_SECRET_KEY, {
-            expiresIn: "7d"
+            expiresIn: "2d"
         })
 
-        res.cookie("auth_token", token);
+        const options = {
+            expires: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),  
+            httpOnly: true
+        }
 
-        return res.status(200).json({
+        res.cookie("auth_token", token, options).status(200).json({
             success: true,
-            message: "User logged in",
-            userId: user._id,
             token,
+            userId: user._id,
+            message: "Logged in successfully",
         })
     } 
     catch (error) {

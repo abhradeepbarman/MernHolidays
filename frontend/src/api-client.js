@@ -245,9 +245,11 @@ export const createRoomBooking = async(formData) => {
         body: JSON.stringify(formData)
     })
 
+    console.log("response", response);
+
     if(!response.ok) {
         throw new Error("Error booking room")
     }
 
-    return response.json()
+    return response
 }

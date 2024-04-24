@@ -1,6 +1,6 @@
 const Hotel = require("../models/Hotel")
-const Stripe = require("stripe")
-const stripe = new Stripe(process.env.STRIPE_API_KEY)
+const User = require("../models/User")
+const stripe = require("stripe")(process.env.STRIPE_API_KEY)
 
 const constructSearchQuery = (queryParams) => {
   let constructedQuery = {};
@@ -123,7 +123,7 @@ exports.searchHotelbyId = async(req, res) => {
       })
     }
 
-    res.send(hotel)
+    res.json(hotel)
   } 
   catch (error) {
     console.log(error);
@@ -135,55 +135,88 @@ exports.searchHotelbyId = async(req, res) => {
 }
 
 exports.createPaymentIntent = async (req, res) => {
-  const { numberOfNights } = req.body;
-  const hotelId = req.params.hotelId;
+  try {
+    const { numberOfNights } = req.body;
+    const hotelId = req.params.hotelId;
+    const userId = req.userId
 
-  const hotel = await Hotel.findById(hotelId);
-  if (!hotel) {
-    return res.status(400).json({
-      success: false,
-      message: "Hotel not found"
-    });
-  }
-
-  const totalCost = parseInt(hotel.pricePerNight) * numberOfNights;
-
-  const minimumChargeAmount = 100; // Adjust this according to the minimum charge amount for INR
-
-  if (totalCost < minimumChargeAmount) {
-    return res.status(400).json({
-      success: false,
-      message: "The total cost is below the minimum charge amount allowed for INR."
-    });
-  }
-
-  const paymentIntent = await stripe.paymentIntents.create({
-    amount: totalCost,
-    currency: "inr",
-    metadata: {
-      hotelId,
-      userId: req.userId,
+    const user = await User.findById(userId)
+    if(!user) {
+      return res.status(400).json({
+        success: false,
+        message: "User not found"
+      })
     }
-  });
 
-  if (!paymentIntent.client_secret) {
-    return res.status(500).json({
+    const hotel = await Hotel.findById(hotelId);
+    if (!hotel) {
+      return res.status(400).json({
+        success: false,
+        message: "Hotel not found"
+      });
+    }
+
+    const totalCost = parseInt(hotel.pricePerNight) * numberOfNights;
+
+    const minimumChargeAmount = 100; // Adjust this according to the minimum charge amount for INR
+
+    if (totalCost < minimumChargeAmount) {
+      return res.status(400).json({
+        success: false,
+        message: "The total cost is below the minimum charge amount allowed for INR."
+      });
+    }
+
+    const customer = await stripe.customers.create({
+      name: `${user.firstName} ${user.lastName}`,
+      address: {
+        line1: '510 Townsend St',
+        postal_code: '98140',
+        city: 'San Francisco',
+        state: 'CA',
+        country: 'US',
+      },
+    })
+
+    const paymentIntent = await stripe.paymentIntents.create({
+      amount: totalCost * 100,
+      currency: "inr",
+      metadata: {
+        hotelId,
+        userId: req.userId,
+      },
+      description: "Hotel Booking",
+      customer: customer.id
+    });
+
+    console.log("payment intent", paymentIntent);
+
+    if (!paymentIntent.client_secret) {
+      return res.status(500).json({
+        success: false,
+        message: "Error creating payment intent",
+      });
+    }
+
+    const response = {
+      paymentIntentId: paymentIntent.id,
+      clientSecret: paymentIntent.client_secret.toString(),
+      totalCost
+    };
+
+    res.send(response);
+  } catch (error) {
+    console.error("Error creating payment intent:", error);
+    res.status(500).json({
       success: false,
-      message: "Error creating payment intent",
+      message: "Internal server error",
     });
   }
-
-  const response = {
-    paymentIntentId: paymentIntent.id,
-    clientSecret: paymentIntent.client_secret.toString(),
-    totalCost
-  };
-
-  res.send(response);
 }
 
 exports.createHotelBooking = async(req, res) => {
   try {
+    console.log("req body", req.body);
     const paymentIntentId = req.body.paymentIntentId
     
     const paymentIntent = await stripe.paymentIntents.retrieve(paymentIntentId)
@@ -196,7 +229,7 @@ exports.createHotelBooking = async(req, res) => {
     }
 
     if(paymentIntent.metadata.hotelId !== req.params.hotelId ||
-        paymentIntent.metadata.userId !== req.body.userId) {
+        paymentIntent.metadata.userId !== req.userId) {
           return res.status(400).json({
             success: false,
             message: "Payment intent mismatch",
@@ -215,11 +248,13 @@ exports.createHotelBooking = async(req, res) => {
       userId: req.userId
     }
 
-    const hotel = await Hotel.findOne({_id: req.params.hotelId}, {
+    const hotel = await Hotel.findOneAndUpdate({_id: req.params.hotelId}, {
       $push : {
         bookings: newBooking
       }
     })
+
+    console.log("hotel", hotel);
 
     if(!hotel) {
       return res.status(400).json({

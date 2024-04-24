@@ -16,8 +16,8 @@ function SearchResultCard({hotel}) {
           <div className="flex items-center">
             <span className="flex">
               {
-                Array.from({ length: hotel.starRating }).map((i) => (
-                  <AiFillStar className="fill-yellow-400" key={i} />
+                Array.from({ length: hotel.starRating }).map(( _ , index) => (
+                  <AiFillStar className="fill-yellow-400" key={index} />
               ))
               }
             </span>

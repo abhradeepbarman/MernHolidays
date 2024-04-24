@@ -18,8 +18,8 @@ function BookingForm({currentUser, paymentIntent}) {
       onSuccess: () => {
         toast.success("Booking saved!")
       },
-      onError: () => {
-        toast.error("Error")
+      onError: (err) => {
+        toast.error(`Error: ${err.message}`)
       }
     })
 
@@ -47,11 +47,14 @@ function BookingForm({currentUser, paymentIntent}) {
         return;
       }
 
-      const result = await stripe.confirmCardPayment(paymentIntent.clientSecret, {
-        payment_method: {
-          card: elements.getElement(CardElement)
+      const result = await stripe.confirmCardPayment(
+        paymentIntent.clientSecret, 
+        {
+          payment_method: {
+            card: elements.getElement(CardElement),
+          }
         }
-      })
+      )
 
       if(result.paymentIntent?.status === "succeeded") {
         //book the room

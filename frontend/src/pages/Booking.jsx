@@ -11,6 +11,7 @@ import { loadStripe } from "@stripe/stripe-js";
 // Payment -------------------------------------------
 const STRIPE_PUB_KEY = import.meta.env.VITE_STRIPE_PUB_KEY || ""
 const stripePromise = loadStripe(STRIPE_PUB_KEY)
+// ------------------------------------------------------
 
 function Booking() {
 
@@ -31,6 +32,7 @@ function Booking() {
     const {data: paymentIntentData} = useQuery({
       queryKey: ["createPaymentIntent", hotelId, numberOfNights],
       queryFn: () =>   createPaymentIntent(hotelId, numberOfNights.toString()), 
+      enabled: !!hotelId && numberOfNights > 0
     });
 
     console.log(paymentIntentData);
