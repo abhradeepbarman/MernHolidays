@@ -25,6 +25,9 @@ const constructSearchQuery = (queryParams) => {
     };
   }
 
+
+  //   If queryParams.facilities is an array, it directly assigns the array to $all.
+  // If queryParams.facilities is not an array (i.e., it's a single value), it wraps that value into an array before assigning it to $all.
   if (queryParams.facilities) {
     constructedQuery.facilities = {
       $all: Array.isArray(queryParams.facilities)
@@ -33,6 +36,8 @@ const constructSearchQuery = (queryParams) => {
     };
   }
 
+
+  // The $in operator selects the documents where the value of a field equals any value in the specified array.
   if (queryParams.types) {
     constructedQuery.type = {
       $in: Array.isArray(queryParams.types)

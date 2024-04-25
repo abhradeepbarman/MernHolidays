@@ -30,7 +30,7 @@ function Details() {
 
                 </span>
 
-                <span className="font-semibold">( {data?.starRating} Stars )</span>
+                <span className="font-semibold">( {data?.type} )</span>
             </div>
             
             <div>
