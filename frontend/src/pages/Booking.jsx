@@ -2,11 +2,12 @@ import { createPaymentIntent, fetchCurrentUser, fetchHotelById } from "../api-cl
 import { useQuery } from '@tanstack/react-query';
 import BookingForm from "../forms/BookingForm/BookingForm";
 import { useSelector } from "react-redux";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import BookingDetailSummary from "../components/BookingDetailSummary";
 import { Elements } from "@stripe/react-stripe-js"
 import { loadStripe } from "@stripe/stripe-js";
+import { ArrowLeft } from 'lucide-react'
 
 // Payment -------------------------------------------
 const STRIPE_PUB_KEY = import.meta.env.VITE_STRIPE_PUB_KEY || ""
@@ -17,6 +18,7 @@ function Booking() {
 
   const search = useSelector((state) => state.search)
     const {hotelId} = useParams()
+    const navigate = useNavigate()
 
     const [numberOfNights, setNumberOfNights] = useState(0)
 
@@ -64,6 +66,25 @@ function Booking() {
           numberOfNights={numberOfNights}
           hotel={hotel}
       />
+      {
+        numberOfNights === 0 && (
+          <div className="text-4xl text-center mt-10 p-5 font-semibold space-y-8">
+            <div>
+              Please add the hotel for atleast 1 Night. 
+              <span className="text-[#8576FF]"> Thanks!</span>
+            </div>
+
+            <button
+              type="button"
+              className="inline-flex items-center rounded-md bg-black px-3 py-2 text-sm font-semibold text-white hover:bg-black/80"
+              onClick={() => navigate(-1)}
+            >
+              <ArrowLeft className="mr-2 h-4 w-4" />
+              Back
+            </button>
+          </div>
+        )
+      }
       {
         currentUser && paymentIntentData && (
             <Elements stripe={stripePromise} options={{

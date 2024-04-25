@@ -5,11 +5,12 @@ import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
 import { setSearchValues } from "../../Store/slices/SearchSlice";
 
-function GuestInfoForm({ hotelId, pricePerNight }) {
+function GuestInfoForm({ hotelId, pricePerNight, user }) {
   const search = useSelector((state) => state.search);
   const { token } = useSelector((state) => state.auth);
+  const { userId } = useSelector((state) => state.auth);
   const navigate = useNavigate();
-  const location = useLocation()
+  const location = useLocation();
   const dispatch = useDispatch();
 
   const {
@@ -35,37 +36,40 @@ function GuestInfoForm({ hotelId, pricePerNight }) {
   maxDate.setFullYear(maxDate.getFullYear() + 1);
 
   const onsubmit = (data) => {
-
-    dispatch(setSearchValues({
-      destination: "",
-      checkIn: data.checkIn,
-      checkOut: data.checkOut,
-      adultCount: data.adultCount,
-      childCount: data.childCount
-    }))
+    dispatch(
+      setSearchValues({
+        destination: "",
+        checkIn: data.checkIn,
+        checkOut: data.checkOut,
+        adultCount: data.adultCount,
+        childCount: data.childCount,
+      })
+    );
 
     navigate(`/hotel/${hotelId}/booking`);
   };
 
   const onSignInClick = (data) => {
-    dispatch(setSearchValues({
-      destination: "",
-      checkIn: data.checkIn,
-      checkOut: data.checkOut,
-      adultCount: data.adultCount,
-      childCount: data.childCount
-    }))
+    dispatch(
+      setSearchValues({
+        destination: "",
+        checkIn: data.checkIn,
+        checkOut: data.checkOut,
+        adultCount: data.adultCount,
+        childCount: data.childCount,
+      })
+    );
 
-    navigate("/sign-in", { state: { from: location }})
-  }
+    navigate("/sign-in", { state: { from: location } });
+  };
 
   return (
     <div className="flex flex-col p-4 bg-blue-200 gap-4">
       <h3 className="text-xl font-bold">₹ {pricePerNight}</h3>
 
-      <form onSubmit={
-        token ? handleSubmit(onsubmit) : handleSubmit(onSignInClick)
-      }>
+      <form
+        onSubmit={token ? handleSubmit(onsubmit) : handleSubmit(onSignInClick)}
+      >
         <div className="grid grid-cols-1 gap-4 items-center">
           <div>
             <DatePicker
@@ -140,6 +144,33 @@ function GuestInfoForm({ hotelId, pricePerNight }) {
           </div>
 
           {
+            !token 
+            ? (<button
+                type="submit"
+                className="bg-blue-600 text-white p-2 font-bold hover:bg-blue-500 text-xl"
+              >
+                Sign in to Book
+              </button>
+            )
+            : user === userId ? (
+              <button
+              onClick={() => navigate("/my-hotels")}
+              className="bg-blue-600 text-white p-2 font-bold hover:bg-blue-500 text-xl"
+            >
+              Go to Your Hotel
+            </button>
+            )
+            : (
+              <button
+              type="submit"
+              className="bg-blue-600 text-white p-2 font-bold hover:bg-blue-500 text-xl"
+            >
+              Book Now
+            </button>
+            )
+          }
+
+          {/* {
             token 
             ? (
             <button
@@ -155,7 +186,7 @@ function GuestInfoForm({ hotelId, pricePerNight }) {
             >
               Sign in to Book
             </button>
-          )}
+          )} */}
         </div>
       </form>
     </div>

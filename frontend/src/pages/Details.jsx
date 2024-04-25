@@ -12,7 +12,6 @@ function Details() {
         queryFn: () => fetchHotelById(hotelId) 
     })
 
-
     if(!data) {
         return <></>
     }
@@ -69,7 +68,7 @@ function Details() {
             </div>
 
             <div className="h-fit">
-                <GuestInfoForm hotelId={hotelId} pricePerNight={data?.pricePerNight} />
+                <GuestInfoForm hotelId={hotelId} pricePerNight={data?.pricePerNight} user={data?.userId} />
             </div>
         </div>
     </div>

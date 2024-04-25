@@ -33,11 +33,11 @@ function Footer() {
             </span>
         </div>
 
-        <div className="flex flex-col items-center container mx-auto space-y-5 mt-5">
+        <div className="flex flex-col items-center container mx-auto space-y-8 mt-5">
           <h1 className="text-white text-3xl font-semibold">
             Stay in the know
           </h1>
-          <p className="text-center text-gray-300">
+          <p className="text-center text-gray-300 leading-relaxed px-20">
             Sign up to get marketing emails from MernHolidays.com, including promotions, rewards, travel experiences and information about Booking.com’s and Booking.com Transport Limited’s products and services.
           </p>
 
