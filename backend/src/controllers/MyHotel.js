@@ -165,3 +165,32 @@ exports.acceptBooking = async(req, res) => {
         })
     }
 }
+
+exports.deleteHotel = async(req, res) => {
+    const {hotelId} = req.body;
+
+    try {
+        const hotel = Hotel.findById(hotelId);
+
+        if(!hotel) {
+            return res.status(404).json({
+                success: false,
+                message: "Hotel not found",
+            })
+        }
+
+        //delete hotel
+        await Hotel.findByIdAndDelete(hotelId)
+
+        return res.status(200).json({
+            success: true,
+            message: "Hotel deleted successfully",
+        })
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({
+            success: false,
+            message: "Internal server error",
+        })
+    }
+}

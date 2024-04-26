@@ -295,3 +295,25 @@ export const changeAcceptBooking = async(hotelId) => {
     const result = await response.json()
     return result;
 }
+
+export const deleteHotelById = async(hotelId) => {
+    const response = await fetch(`${API_BASE_URL}/api/my-hotels/deleteHotel`, {
+        method: "DELETE",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        credentials: "include",
+        body: JSON.stringify({hotelId})
+    })
+
+    console.log("response", response);
+
+    if(!response.ok) {
+        toast.error("Error")
+        throw new Error("Error while deleting Hotel")
+    }
+
+    toast.success("Hotel Deleted!")
+    const result = await response.json()
+    return result
+}
