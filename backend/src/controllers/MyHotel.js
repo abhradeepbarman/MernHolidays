@@ -27,6 +27,7 @@ exports.addHotel = async(req, res) => {
         newHotel.imageUrls = imageUrls;
         newHotel.lastUpdated = new Date()
         newHotel.userId = req.userId;
+        newHotel.acceptBooking = true
 
 
         //save the new Hotel in our DB
@@ -123,6 +124,44 @@ exports.updateHotel = async(req, res) => {
         return res.status(500).json({
             success: false,
             message: "Something went wrong!"
+        })
+    }
+}
+
+exports.acceptBooking = async(req, res) => {
+    const {hotelId} = req.body;
+
+    try {
+        //find hotel
+        const hotel = await Hotel.findById(hotelId)
+
+        if(!hotel) {
+            return res.status(404).json({
+                success: false,
+                message: "Hotel not Found",
+            })
+        }
+
+        //update accept booking
+        if(hotel.acceptBooking === true) {
+            hotel.acceptBooking = false
+        }
+        else {
+            hotel.acceptBooking = true;
+        }
+        await hotel.save()
+
+        //return response
+        return res.status(200).json({
+            success: false,
+            message: "Hotel accept booking status changed successfully",
+        })
+    } 
+    catch (error) {
+        console.log(error);
+        return res.status(500).json({
+            success: false,
+            message: "Internal server error",
         })
     }
 }

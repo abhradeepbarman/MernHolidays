@@ -1,15 +1,21 @@
 import { Link } from "react-router-dom";
-import { fetchMyHotels } from "../api-client";
+import { changeAcceptBooking, fetchMyHotels } from "../api-client";
 import { BsBuilding, BsMap } from "react-icons/bs";
 import { BiHotel, BiMoney, BiStar } from "react-icons/bi";
 import { useQuery } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 
 function MyHotels() {
-  const { data: hotels, isError } = useQuery({
+
+  const { data: hotels, isError, refetch } = useQuery({
     queryKey: ["fetchMyHotels"],
     queryFn: fetchMyHotels,
   });
+
+  const handleAcceptBookingChange = async(hotelId) => {
+    await changeAcceptBooking(hotelId)
+    refetch()
+  }
 
   if (isError) {
     toast.error("Error");
@@ -40,7 +46,22 @@ function MyHotels() {
             key={index}
             className="flex flex-col justify-between border border-slate-300 rounded-lg p-8 gap-5"
           >
-            <h2 className="text-2xl font-bold">{hotel.name}</h2>
+            <div className="flex justify-between">
+              <h2 className="text-2xl font-bold">{hotel.name}</h2>
+
+              {/* Accept Booking button  */}
+              <label className="inline-flex items-center cursor-pointer">
+                <input 
+                  type="checkbox" 
+                  value="" 
+                  className="sr-only peer" 
+                  checked={hotel.acceptBooking} 
+                  onChange={() => handleAcceptBookingChange(hotel._id)}
+                />
+                <div className="relative w-11 h-6 bg-gray-200 rounded-full peer peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+                <span className="ms-3 text-sm font-medium text-gray-900 dark:text-gray-400">Accepting Bookings</span>
+              </label>
+            </div>
 
             <div className="whitespace-pre-line">
               {hotel.description.split(" ").length > 70

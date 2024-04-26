@@ -277,3 +277,21 @@ export const fetchMyBookings = async() => {
     const result = await response.json()
     return result
 }
+
+export const changeAcceptBooking = async(hotelId) => {
+    const response = await fetch(`${API_BASE_URL}/api/my-hotels/acceptBooking`, {
+        method: "PUT",
+        credentials: "include",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({hotelId})
+    })
+
+    if(!response.ok) {
+        throw new Error( "Hotel accept booking status not changed")
+    }
+
+    const result = await response.json()
+    return result;
+}

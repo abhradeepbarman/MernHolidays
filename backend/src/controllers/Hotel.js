@@ -60,6 +60,10 @@ const constructSearchQuery = (queryParams) => {
     };
   }
 
+  constructedQuery.acceptBooking = {
+    $eq: true,
+  }
+
   return constructedQuery;
 };
 
@@ -84,7 +88,11 @@ exports.searchHotel = async(req, res) => {
         const pageNumber = parseInt(req.query.page ? req.query.page.toString() : "1")
         const skip = (pageNumber - 1) * pageSize;
 
-        const hotels = await Hotel.find(query).sort(sortOptions).skip(skip).limit(pageSize)
+        const hotels = await Hotel
+                            .find(query)
+                            .sort(sortOptions)
+                            .skip(skip)
+                            .limit(pageSize)
 
         const total = await Hotel.countDocuments(query)
 
@@ -282,7 +290,11 @@ exports.createHotelBooking = async(req, res) => {
 
 exports.getLatestHotels = async(req, res) => {
   try {
-    const hotels = await Hotel.find().sort("-lastUpdated")
+    const hotels = await Hotel.find({
+      acceptBooking: {
+        $eq: true,
+      }
+    }).sort("-lastUpdated")
     res.json(hotels)
   } 
   catch (error) {

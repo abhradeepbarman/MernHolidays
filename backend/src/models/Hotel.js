@@ -94,7 +94,11 @@ const HotelSchema = new mongoose.Schema({
         type: Date,
         required: true,
     },
-    bookings: [bookingSchema]
+    bookings: [bookingSchema],
+    acceptBooking : {
+        type: Boolean,
+        required: true,
+    }
 })
 
 module.exports = mongoose.model("Hotel", HotelSchema)
