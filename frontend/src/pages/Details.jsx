@@ -3,9 +3,11 @@ import {useQuery} from "@tanstack/react-query"
 import { fetchHotelById } from "../api-client"
 import {AiFillStar} from "react-icons/ai"
 import GuestInfoForm from "../forms/GuestInfoForm/GuestInfoForm"
+import { PhotoProvider, PhotoView } from 'react-photo-view';
+import 'react-photo-view/dist/react-photo-view.css';
 
 function Details() {
-    const { hotelId } = useParams()
+    const { hotelId } = useParams()    
     
     const {data} = useQuery({
         queryKey: ["fetchHotelById"], 
@@ -38,19 +40,22 @@ function Details() {
                 <span>{data?.city}, {data?.country}</span>
             </div>
         </div>
-
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-            {
-                data.imageUrls.map((image, index) => (
-                    <div className="h-[300px]" key={index}>
-                        <img src={image} 
-                            alt={data.name} 
-                            className="rounded-md w-full h-full object-cover object-center" 
-                        />
-                    </div>
-                ))
-            }
-        </div>
+        
+        <PhotoProvider>
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+                {
+                    data.imageUrls.map((image) => (
+                        <PhotoView key={image} src={image}>
+                            <img 
+                                src={image} 
+                                alt={data.name} 
+                                className="rounded-md w-full h-full object-cover object-center" 
+                            />  
+                        </PhotoView>
+                    ))
+                }
+            </div>
+        </PhotoProvider>
 
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-2">
             {
