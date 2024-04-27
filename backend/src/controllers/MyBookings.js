@@ -11,10 +11,14 @@ exports.getMyBookings = async(req, res) => {
                     userId: userId,
                 }
             }
-        })   
+        })
         
         const results = hotels.map((hotel) => {
             const userBookings = hotel.bookings.filter((booking) => booking.userId === userId)
+
+            const recentUserBookings = userBookings.sort((a, b) => b.bookedAt - a.bookedAt)
+
+            console.log(recentUserBookings);
 
             const hotelWithUserBookings = {
                 ...hotel.toObject(),

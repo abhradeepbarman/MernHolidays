@@ -157,10 +157,12 @@ function MyHotels() {
               <path d="M11 17v-7a1 1 0 0 0-2 0v7a1 1 0 0 0 2 0Zm4 0v-7a1 1 0 0 0-2 0v7a1 1 0 0 0 2 0Z"
                 data-original="#000000" />
             </svg>
-            <h4 className="text-xl font-semibold mt-6">Are you sure you want to delete it?</h4>
-            <p className="text-sm text-gray-500 mt-4">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed auctor auctor
-              arcu,
-              at fermentum dui. Maecenas</p>
+            <h4 className="text-xl font-semibold mt-6">
+              Are you sure you want to delete it?
+            </h4>
+            <p className="text-sm text-gray-500 mt-4">
+              All data related to this Hotel will get deleted!
+            </p>
           </div>
           <div className="flex flex-col space-y-2">
             <button type="button"

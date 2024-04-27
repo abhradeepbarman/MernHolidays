@@ -229,7 +229,6 @@ exports.createPaymentIntent = async (req, res) => {
 
 exports.createHotelBooking = async(req, res) => {
   try {
-    console.log("req body", req.body);
     const paymentIntentId = req.body.paymentIntentId
     
     const paymentIntent = await stripe.paymentIntents.retrieve(paymentIntentId)
@@ -258,6 +257,7 @@ exports.createHotelBooking = async(req, res) => {
 
     const newBooking = {
       ...req.body,
+      bookedAt: new Date(),
       userId: req.userId
     }
 

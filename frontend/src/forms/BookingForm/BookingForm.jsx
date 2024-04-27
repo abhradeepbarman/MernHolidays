@@ -2,13 +2,14 @@ import { CardElement, useElements, useStripe } from '@stripe/react-stripe-js';
 import { useMutation } from '@tanstack/react-query';
 import { useForm } from 'react-hook-form';
 import { useSelector } from 'react-redux';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { createRoomBooking } from '../../api-client';
 import toast from 'react-hot-toast';
 
 function BookingForm({currentUser, paymentIntent}) {
     const stripe = useStripe()
     const elements = useElements()
+    const navigate = useNavigate()
 
     const search = useSelector((state) => state.search)
     const {hotelId} = useParams()
@@ -17,6 +18,7 @@ function BookingForm({currentUser, paymentIntent}) {
       mutationFn: createRoomBooking,
       onSuccess: () => {
         toast.success("Booking saved!")
+        navigate("/my-bookings")
       },
       onError: (err) => {
         toast.error(`Error: ${err.message}`)
@@ -43,6 +45,8 @@ function BookingForm({currentUser, paymentIntent}) {
 
 
     const onSubmit = async(formData) => {
+      const toastId = toast.loading("Loading...")
+      
       if(!stripe || !elements) {
         return;
       }
@@ -60,6 +64,8 @@ function BookingForm({currentUser, paymentIntent}) {
         //book the room
         bookRoom({...formData, paymentIntentId: result.paymentIntent.id})
       }
+
+      toast.dismiss(toastId)
     }
 
   return (

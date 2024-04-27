@@ -36,8 +36,13 @@ function MyBookings() {
               </div>
             </div>
 
-            {hotel.bookings.map((booking, index) => (
+            {
+              hotel.bookings.map((booking, index) => (
               <div key={index}>
+                <div>
+                  <span className="font-bold">Booking Id:</span> {booking._id}
+                </div>
+
                 <div>
                   <span className="font-bold mr-2">Dates: </span>
                   <span>
