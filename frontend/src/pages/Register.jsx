@@ -3,10 +3,15 @@ import {useNavigate} from "react-router-dom"
 import { useMutation } from '@tanstack/react-query';
 import toast from "react-hot-toast";
 import { register as signup } from "../api-client";
+import { useState } from "react";
+import { IoEye, IoEyeOff } from "react-icons/io5";
 
 function Register() {
 
     const navigate = useNavigate();
+
+    const [showPassword, setShowPassword] = useState(false)
+    const [showConfirmPassword, setShowConfirmPassword] = useState(false)
 
     const { 
       register,
@@ -87,16 +92,28 @@ function Register() {
             }
         </label>
 
-        <label className="text-gray-700 text-sm font-bold flex-1">
+        <label className="text-gray-700 text-sm font-bold flex-1 relative">
           Password
-          <input type="password" className="border rounded w-full py-1 px-2 font-normal" 
+          <input 
+            type={`${showPassword ? "text" : "password"}`} 
+            className="border rounded w-full py-1 px-2 font-normal" 
             {...register("password", {
               required: "This field is required", 
               minLength: {
                 value: 6,
                 message: "Password must be atleast 6 characters"
             }})}
+
           />
+          <div onClick={() => setShowPassword(!showPassword)}
+            className="cursor-pointer absolute top-6 right-5 text-xl" 
+          >
+            {
+              showPassword 
+                ? <IoEyeOff/> 
+                : <IoEye />
+            }
+          </div>
           {
             errors.password && (
               <span className="text-red-500">
@@ -106,9 +123,11 @@ function Register() {
           }
         </label>
 
-        <label className="text-gray-700 text-sm font-bold flex-1">
+        <label className="text-gray-700 text-sm font-bold flex-1 relative">
           Confirm Password
-          <input type="password" className="border rounded w-full py-1 px-2 font-normal" 
+          <input 
+            type={`${showConfirmPassword ? "text" : "password"}`} 
+            className="border rounded w-full py-1 px-2 font-normal" 
             {...register("confirmPassword", {
               validate: (val) => {
                 if(!val) {
@@ -120,6 +139,15 @@ function Register() {
               }
             })}
           />
+          <div onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+            className="cursor-pointer absolute top-6 right-5 text-xl" 
+          >
+            {
+              showConfirmPassword 
+                ? <IoEyeOff /> 
+                : <IoEye />
+            }
+          </div>
           {
             errors.confirmPassword && (
               <span className="text-red-500">
