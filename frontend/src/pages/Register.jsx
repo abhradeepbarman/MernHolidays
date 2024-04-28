@@ -2,13 +2,16 @@ import {useForm} from "react-hook-form"
 import {useNavigate} from "react-router-dom"
 import { useMutation } from '@tanstack/react-query';
 import toast from "react-hot-toast";
-import { register as signup } from "../api-client";
+import { verifyEmail } from "../api-client";
 import { useState } from "react";
 import { IoEye, IoEyeOff } from "react-icons/io5";
+import { useDispatch } from 'react-redux';
+import { setSignupData } from "../Store/slices/SignupSlice";
 
 function Register() {
 
     const navigate = useNavigate();
+    const dispatch = useDispatch()
 
     const [showPassword, setShowPassword] = useState(false)
     const [showConfirmPassword, setShowConfirmPassword] = useState(false)
@@ -23,10 +26,10 @@ function Register() {
 
 
     const mutation = useMutation({
-      mutationFn: signup,
+      mutationFn: verifyEmail,
       onSuccess: async() => {
-        toast.success("Registration success")
-        navigate("/sign-in")
+        toast.success("OTP sent")
+        navigate("/verify-email")
       },
       onError: (error) => {
         toast.error(error.message)
@@ -34,7 +37,15 @@ function Register() {
     })
 
     const onsubmit = async(data) => {
-      mutation.mutate(data)
+      mutation.mutate(data.email)
+
+      dispatch(setSignupData({
+        firstName: data.firstName,
+        lastName: data.lastName,
+        email: data.email,
+        password: data.password,
+        confirmPassword: data.confirmPassword,
+      }))
 
        //clear the form
        setValue("firstName", "");

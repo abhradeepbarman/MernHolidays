@@ -2,6 +2,26 @@ import {toast} from "react-hot-toast"
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
+export const verifyEmail = async(email) => {
+    const toastId = toast.loading("Loading...")
+    const response = await fetch(`${API_BASE_URL}/api/auth/sendOtp`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({email})
+    })
+
+    if(!response.ok) {
+        toast.dismiss(toastId)
+        throw new Error("Error while verifying email")
+    }
+
+    toast.dismiss(toastId)
+    const result = await response.json()
+    return result
+}
+
 export const register = async(formData) => {
     const response = await fetch(`${API_BASE_URL}/api/auth/register`, {
         method: "POST",

@@ -1,16 +1,80 @@
 const User = require("../models/User")
 const bcrypt = require("bcrypt")
-const { validationResult } = require("express-validator")
 const jwt = require("jsonwebtoken")
+const otpGenerator = require('otp-generator')
+const OTP = require("../models/OTP")
+
+exports.sendOtp = async(req, res) => {
+    const {email} = req.body;
+
+    try {
+        //check user already exist or not
+        const checkUserPresent = await User.findOne({email})
+
+        if(checkUserPresent) {
+            return res.status(400).json({
+                success: false,
+                message: "User already registered!",
+            })
+        }
+
+        //otp generate
+        let otp = otpGenerator.generate(4, { 
+            upperCaseAlphabets: false, 
+            specialChars: false,
+            lowerCaseAlphabets: false,
+        });
+
+        //check unique otp or not
+        let result = await OTP.find({otp})
+
+        if(result) {
+            otp = otpGenerator.generate(4, { 
+                upperCaseAlphabets: false, 
+                specialChars: false,
+                lowerCaseAlphabets: false,
+            });
+
+            result = await OTP.find({otp})
+        }
+
+        //save otp in db  
+        await OTP.create({
+            email,
+            otp,
+        })
+
+        //return response
+        return res.status(200).json({
+            success: true,
+            message: "OTP sent successfully",
+        })
+    } 
+    catch (error) {
+        console.log(error);
+        return res.status(500).json({
+            success: false,
+            message: "Internal server error",
+        })
+    }
+}
 
 exports.register = async(req, res) => {
     
-    const {email, password, firstName, lastName} = req.body
+    const {email, password, confirmPassword, firstName, lastName, otp} = req.body
 
-    if(!email || !password || !firstName || !lastName) {
+    if(!email || !password || !confirmPassword || !firstName || !lastName || !otp) {
         return res.status(400).json({
             success: false,
             message: "All the fields are required"
+        })
+    }
+
+    //2 password match
+    if(password !== confirmPassword) {
+        return res.status(400).json({
+            success: false,
+            message: "Password & Confirm Password value does not match, please Try again!"
         })
     }
 
@@ -23,6 +87,24 @@ exports.register = async(req, res) => {
             return res.status(400).json({
                 success: false,
                 message: "User already exists"
+            })
+        }
+
+        //find recent otp
+        const recentOtp = await OTP.find({email}).sort({createdAt:-1}).limit(1);
+        console.log(recentOtp);
+        if(recentOtp.length === 0 ) {
+            return res.status(400).json({
+                success: false,
+                message: "OTP not found",
+            })
+        }
+
+        //verify otp
+        if(recentOtp[0].otp !== otp) {
+            return res.status(400).json({
+                success: false,
+                message: "Invalid OTP",
             })
         }
 

@@ -12,6 +12,7 @@ import Details from "./pages/Details"
 import Booking from "./pages/Booking"
 import MyBookings from './pages/MyBookings';
 import Home from "./pages/Home"
+import VerifyEmail from './pages/VerifyEmail';
 
 function App() {
   const {token} = useSelector((state) => state.auth)
@@ -40,6 +41,13 @@ function App() {
           </Layout>}
         />
         
+        <Route 
+          path="/verify-email"
+          element={<Layout showSearchBar={false}>
+            <VerifyEmail />
+          </Layout>}
+        />
+
         <Route 
           path="/sign-in"
           element={<Layout showSearchBar={false}>

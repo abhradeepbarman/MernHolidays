@@ -17,7 +17,7 @@ const UserSchema = new mongoose.Schema({
     lastName: {
         type: String,
         requied: true,
-    }
+    },
 })
 
 module.exports = mongoose.model("User", UserSchema)
