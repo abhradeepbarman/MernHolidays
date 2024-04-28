@@ -12,15 +12,9 @@ const otpSchema = new mongoose.Schema({
     },
     createdAt: {
         type: Date,
-        default: Date.now(),
+        default: Date.now,
+        expires: 300,
     },
-    expiration: {
-        type: Date,
-        default: function() { 
-            return Date.now() + 5*60*1000; 
-        },
-        index: { expires: '5m' } 
-    }
 })
 
 otpSchema.pre("save", async function(next) {

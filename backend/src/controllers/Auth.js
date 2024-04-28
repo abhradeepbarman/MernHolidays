@@ -60,8 +60,9 @@ exports.sendOtp = async(req, res) => {
 }
 
 exports.register = async(req, res) => {
-    
+    console.log(req.body);
     const {email, password, confirmPassword, firstName, lastName, otp} = req.body
+
 
     if(!email || !password || !confirmPassword || !firstName || !lastName || !otp) {
         return res.status(400).json({
@@ -70,13 +71,6 @@ exports.register = async(req, res) => {
         })
     }
 
-    //2 password match
-    if(password !== confirmPassword) {
-        return res.status(400).json({
-            success: false,
-            message: "Password & Confirm Password value does not match, please Try again!"
-        })
-    }
 
     try {
         //check user exists or not
@@ -122,6 +116,7 @@ exports.register = async(req, res) => {
         return res.status(200).send({ 
             success: true,
             message: "User registered",
+            newUser
         });
     } 
     catch (error) {

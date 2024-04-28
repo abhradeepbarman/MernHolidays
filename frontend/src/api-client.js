@@ -22,20 +22,25 @@ export const verifyEmail = async(email) => {
     return result
 }
 
-export const register = async(formData) => {
+export const register = async(body) => {
+    const toastId = toast.loading("Loading...")
+
     const response = await fetch(`${API_BASE_URL}/api/auth/register`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
         },
-        body: JSON.stringify(formData)
+        body: JSON.stringify(body)
     })
 
+    const result = await response.json()
+
     if(!response.ok) {
+        toast.dismiss(toastId)
         throw new Error(result.message)
     }
 
-    const result = await response.json()
+    toast.dismiss(toastId)
     return result;
 }
 
