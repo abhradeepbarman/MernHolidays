@@ -2,9 +2,10 @@ import { useEffect, useState } from 'react';
 import OtpInput from 'react-otp-input';
 import { useSelector } from 'react-redux';
 import { useMutation } from '@tanstack/react-query';
-import { register } from '../api-client';
+import { register, verifyEmail } from '../api-client';
 import toast from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
+import { IoReload } from "react-icons/io5";
 
 function VerifyEmail() {
   const [otp, setOtp] = useState('');
@@ -22,7 +23,7 @@ function VerifyEmail() {
     mutationFn: register,
     onSuccess: () => {
       toast.success("User registered");
-      navigate("/login")
+      navigate("/sign-in  ")
     },
     onError: (error) => {
       toast.error(error.message)
@@ -41,6 +42,24 @@ function VerifyEmail() {
     } = signupData;
 
     mutation.mutate({email, password, confirmPassword, firstName, lastName, otp})
+  }
+
+  const sendOtp = useMutation({
+    mutationKey: ["sendOtp"],
+    mutationFn: verifyEmail,
+    onSuccess: async() => {
+      toast.success("OTP sent")
+      navigate("/verify-email")
+    },
+    onError: (error) => {
+      toast.error(error.message)
+    }
+  })
+
+  const resendOtp = () => {
+    const { email } = signupData;
+
+    sendOtp.mutate(email)
   }
 
   return (
@@ -64,6 +83,11 @@ function VerifyEmail() {
         >
           Verify Email
         </button>
+      </div>
+
+      <div className='flex items-center gap-2 cursor-pointer' onClick={resendOtp}>
+          <IoReload />
+          Resent OTP
       </div>
     </div>
   )
