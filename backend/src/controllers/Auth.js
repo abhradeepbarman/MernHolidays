@@ -1,5 +1,5 @@
 const User = require("../models/User")
-const bcrypt = require("bcrypt")
+const bcrypt = require("bcryptjs")
 const jwt = require("jsonwebtoken")
 const otpGenerator = require('otp-generator')
 const OTP = require("../models/OTP")
@@ -60,9 +60,7 @@ exports.sendOtp = async(req, res) => {
 }
 
 exports.register = async(req, res) => {
-    console.log(req.body);
     const {email, password, confirmPassword, firstName, lastName, otp} = req.body
-
 
     if(!email || !password || !confirmPassword || !firstName || !lastName || !otp) {
         return res.status(400).json({
@@ -70,7 +68,6 @@ exports.register = async(req, res) => {
             message: "All the fields are required"
         })
     }
-
 
     try {
         //check user exists or not
@@ -113,11 +110,21 @@ exports.register = async(req, res) => {
             lastName
         }) 
 
-        return res.status(200).send({ 
-            success: true,
-            message: "User registered",
-            newUser
-        });
+        const token = jwt.sign({
+            userId: newUser._id,
+            email: newUser.email
+        }, 
+        process.env.JWT_SECRET_KEY, 
+        {
+            expiresIn: "2d"
+        })
+
+        res.cookie("auth_token", token, {
+            httpOnly: true,
+            maxAge: 2*24*60*60*1000,
+        })
+
+        return res.sendStatus(200);
     } 
     catch (error) {
         console.log(error);
@@ -139,7 +146,7 @@ exports.login = async(req, res) => {
     }
 
     try {
-        const user = await User.findOne({email})
+        const user = await User.findOne({ email })
 
         if(!user) {
             return res.status(400).json({
@@ -157,23 +164,23 @@ exports.login = async(req, res) => {
         }
 
         //create token
-        const payload = {
+        const token = jwt.sign(
+        {
             userId: user._id,
             email: user.email
-        }
-
-        const token = jwt.sign(payload, process.env.JWT_SECRET_KEY, {
+        }, 
+        process.env.JWT_SECRET_KEY, 
+        {
             expiresIn: "2d"
         })
 
-        const options = {
-            expires: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),  
-            httpOnly: true
-        }
 
-        res.cookie("auth_token", token, options).status(200).json({
-            success: true,
-            token,
+        res.cookie("auth_token", token, {
+            httpOnly: true,
+            maxAge: 2*24*60*60*1000,
+        })
+
+        res.status(200).json({
             userId: user._id,
             message: "Logged in successfully",
         })

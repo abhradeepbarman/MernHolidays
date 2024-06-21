@@ -4,16 +4,16 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js",
-    "dev": "nodemon index.js",
-    "e2e": "cross-env DOTENV_CONFIG_PATH=.env.e2e nodemon index.js"
+    "dev": "nodemon",
+    "client": "cd .. && cd frontend && npm run dev",
+    "server": "npm run dev",
+    "start": "concurrently -n \"client,server\" -c \"bgBlue,bgYellow\" \"npm run client\" \"npm run server\""
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "-": "^0.0.1",
-    "bcrypt": "^5.1.1",
+    "bcryptjs": "^2.4.3",
     "cloudinary": "^2.1.0",
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
@@ -26,8 +26,11 @@
     "mongoose": "^8.3.1",
     "multer": "^1.4.5-lts.1",
     "nodemailer": "^6.9.13",
-    "nodemon": "^3.1.0",
     "otp-generator": "^4.0.1",
     "stripe": "^15.3.0"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2",
+    "nodemon": "^3.1.3"
   }
 }
