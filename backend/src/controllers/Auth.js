@@ -180,13 +180,13 @@ exports.login = async(req, res) => {
 
 
         res.cookie("auth_token", token, {
-            httpOnly: true,
             maxAge: 2*24*60*60*1000,
         })
 
-        res.status(200).json({
-            userId: user._id,
+        return res.status(200).json({
             message: "Logged in successfully",
+            auth_token: token,
+            userId: user._id
         })
     } 
     catch (error) {
