@@ -2,16 +2,17 @@ const express = require("express")
 const router = express.Router()
 const { addHotel, getHotelDetails, updateHotel, getMyHotels, acceptBooking, deleteHotel } = require("../controllers/MyHotel")
 const { verifyToken } = require("../middleware/auth")
-
-
 const multer = require("multer")
-const storage = multer.memoryStorage()
+
+
+// this middleware is required for stopping users from uploading more than 5 MB files
 const upload = multer({
-    storage: storage,
+    storage: multer.memoryStorage(),
     limits: {
         fileSize: 5*1024*1024, //5MB
     }
 })
+
 
 router.post("/addHotel", upload.array("imageFiles", 6), verifyToken , addHotel)
 router.get("/getMyHotels", verifyToken, getMyHotels)

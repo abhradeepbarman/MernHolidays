@@ -21,11 +21,15 @@ mongoose.connect(process.env.MONGODB_CONNECTION_STRING)
     .then(() => console.log("DB connection successful"))
     .catch(() => console.log("DB connection error"))
 
+const corsOptions = {
+    origin: 'http://localhost:5173', 
+    credentials: true
+};
 
 const app = express()
 app.use(express.json())
 app.use(express.urlencoded({extended: true}))  //helps in parsing form-data
-app.use(cors())
+app.use(cors(corsOptions))
 app.use(cookieParser())
 
 app.use("/api/auth", authRoutes)

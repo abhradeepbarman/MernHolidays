@@ -2,10 +2,10 @@ const Hotel = require("../models/Hotel");
 const { uploadImages } = require("../util/uploadImages");
 
 exports.addHotel = async(req, res) => {
-    const {name, city, country, description, type, pricePerNight, facilities} = req.body;
+    const {name, city, country, description, type, pricePerNight, facilities, starRating, adultCount, childCount} = req.body;
     const imageFiles = req.files;
 
-    if(!name || !city || ! country || !description || !type || !pricePerNight || !facilities) {
+    if(!name || !city || ! country || !description || !type || !pricePerNight  || !facilities || !starRating || !adultCount || !childCount) {
         return res.status(400).json({
             success: false,
             message: "All fields are required",
@@ -33,7 +33,6 @@ exports.addHotel = async(req, res) => {
         //save the new Hotel in our DB
         const hotel = new Hotel(newHotel)
         await hotel.save()
-
 
         //return success status
         return res.status(200).json({
