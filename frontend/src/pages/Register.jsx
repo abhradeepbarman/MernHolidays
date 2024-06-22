@@ -1,5 +1,5 @@
 import {useForm} from "react-hook-form"
-import {useNavigate} from "react-router-dom"
+import {Link, useNavigate} from "react-router-dom"
 import { useMutation } from '@tanstack/react-query';
 import toast from "react-hot-toast";
 import { verifyEmail } from "../api-client";
@@ -168,8 +168,12 @@ function Register() {
           }
         </label>
 
-        <span>
-          <button type="submit" className="bg-blue-600 text-white p-2 font-bold hover:bg-blue-500 text-xl">
+        <span className="flex items-center justify-between" >
+          <span className="text-sm">
+            Already have an account? <Link className="underline" to={"/sign-in"}>Login</Link>
+          </span>
+
+          <button type="submit" className={`${mutation.isPending ? "bg-blue-500" : "bg-blue-600"} text-white p-2 font-bold hover:bg-blue-500 text-xl`} disabled={mutation.isPending}>
             Create Account
           </button>
         </span>

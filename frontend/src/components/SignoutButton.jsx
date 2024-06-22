@@ -4,10 +4,12 @@ import { signout } from "../api-client"
 import { useMutation } from '@tanstack/react-query';
 import { setToken, setUserId } from "../Store/slices/authSlice";
 import toast from "react-hot-toast";
+import {useCookies} from "react-cookie"
 
 function SignoutButton() {
     const dispatch = useDispatch()
     const navigate = useNavigate()
+    const [cookies, setCookie, removeCookie] = useCookies("auth_token")
 
     const mutation = useMutation({
       mutationFn: signout,
@@ -19,6 +21,8 @@ function SignoutButton() {
         //remove token & user id from state
         dispatch(setToken(null))
         dispatch(setUserId(null))
+
+        removeCookie("auth_token")
 
         toast.success("Signed Out")
         navigate("/")

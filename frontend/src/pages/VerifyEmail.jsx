@@ -99,8 +99,9 @@ function VerifyEmail() {
 
       <div>
         <button
-          className="bg-blue-600 text-white p-2 font-bold hover:bg-blue-500 text-xl"
+          className={`${mutation.isPending ? "bg-blue-500" : "bg-blue-600" }  text-white p-2 font-bold hover:bg-blue-500 text-xl`}
           onClick={handleSubmit}
+          disabled={mutation.isPending}
         >
           Verify Email
         </button>

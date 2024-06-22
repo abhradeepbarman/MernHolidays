@@ -4,7 +4,8 @@ import { signIn } from "../api-client";
 import { QueryClient, useMutation } from '@tanstack/react-query';
 import toast from "react-hot-toast";
 import { useDispatch } from 'react-redux';
-import { setToken } from "../Store/slices/authSlice";
+import { setToken, setUserId } from "../Store/slices/authSlice";
+import {useCookies} from "react-cookie"
 
 
 const queryClient = new QueryClient()
@@ -13,6 +14,7 @@ function SignIn() {
     const navigate = useNavigate();
     const dispatch = useDispatch()
     const location = useLocation()
+    const [cookies, setCookies] = useCookies("auth_token")
 
     const {
         register,
@@ -26,12 +28,20 @@ function SignIn() {
       onSuccess: async(data) => {
             
         //store token in the state & local storage
-        localStorage.setItem("auth_token", data.token)
-        dispatch(setToken(data.token))
+        localStorage.setItem("auth_token", data.auth_token)
+        dispatch(setToken(data.auth_token))
         
         //store user Id in state & local storage
         localStorage.setItem("userId", data.userId)
-        dispatch(setToken(data.userId))
+        dispatch(setUserId(data.userId))
+
+        //save cookie
+        const expirationDate = new Date();
+        expirationDate.setDate(expirationDate.getDate() + 30);
+
+        setCookies("auth_token", data.auth_token, {
+          expires: expirationDate
+        })
 
         await queryClient.invalidateQueries("validateToken"),
 
@@ -94,7 +104,7 @@ function SignIn() {
             Not Registered? <Link className="underline" to={"/register"}>Create an account here</Link>
           </span>
 
-          <button type="submit" className="bg-blue-600 text-white p-2 font-bold hover:bg-blue-500 text-xl">
+          <button type="submit" className={`${mutation.isPending ? "bg-blue-500 " : "bg-blue-600"} text-white p-2 font-bold hover:bg-blue-500 text-xl`} disabled={mutation.isPending}>
             Login
           </button>
         </span>
