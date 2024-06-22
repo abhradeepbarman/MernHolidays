@@ -1,5 +1,4 @@
 import {toast} from "react-hot-toast"
-
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 export const verifyEmail = async(email) => {
@@ -32,9 +31,10 @@ export const register = async(body) => {
         },
         body: JSON.stringify(body)
     })
-
+    
     const result = await response.json()
 
+    //DOUBT
     if(!response.ok) {
         toast.dismiss(toastId)
         throw new Error(result.message)
@@ -82,15 +82,25 @@ export const addMyHotel = async(formData) => {
     const response = await fetch(`${API_BASE_URL}/api/my-hotels/addHotel`, {
         method: "POST",
         credentials: "include",
-        body: formData
+        body: formData,
+        headers: {
+            // Explicitly setting Content-Type to null or undefined
+            // to let the browser set it automatically based on FormData
+            "Content-Type": undefined 
+        }
     })
+
+    console.log(response);
 
     if(!response.ok) {
         throw new Error("Failed to add hotel!");
     }
 
+    const result = await response.json();
+    console.log( "hotel-->", result);
+
     toast.dismiss(toastId)
-    return response.json();
+    return result;
 }
 
 export const fetchMyHotels = async() => {

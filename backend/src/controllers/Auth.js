@@ -120,11 +120,15 @@ exports.register = async(req, res) => {
         })
 
         res.cookie("auth_token", token, {
-            httpOnly: true,
             maxAge: 2*24*60*60*1000,
         })
 
-        return res.sendStatus(200);
+        return res.status(200).json({
+            success: true,
+            message: "User registered successfully",
+            auth_token: token,
+            userId: newUser._id,
+        });
     } 
     catch (error) {
         console.log(error);

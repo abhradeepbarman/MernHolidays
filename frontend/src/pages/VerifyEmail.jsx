@@ -1,16 +1,18 @@
 import { useEffect, useState } from 'react';
 import OtpInput from 'react-otp-input';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { useMutation } from '@tanstack/react-query';
 import { register, verifyEmail } from '../api-client';
 import toast from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
 import { IoReload } from "react-icons/io5";
+import { setToken, setUserId } from "../Store/slices/authSlice"
 
 function VerifyEmail() {
   const [otp, setOtp] = useState('');
   const signupData = useSelector((state) => state.signup)
   const navigate = useNavigate()
+  const dispatch = useDispatch()
 
   useEffect(()=> {
     if(!signupData) {
@@ -21,12 +23,20 @@ function VerifyEmail() {
   const mutation = useMutation({
     mutationKey: ["register"],
     mutationFn: register,
-    onSuccess: () => {
+    onSuccess: (data) => {
       toast.success("User registered");
-      navigate("/sign-in  ")
+      navigate("/")
+
+      //store token & userId  in the state & local storage
+      localStorage.setItem("auth_token", data.auth_token)
+      localStorage.setItem("userId", data.userId)
+
+      dispatch(setToken(data.auth_token))
+      dispatch(setUserId(data.userId))
     },
     onError: (error) => {
       toast.error(error.message)
+      navigate("/register")
     }
   })
 
@@ -40,6 +50,7 @@ function VerifyEmail() {
       password,
       confirmPassword,
     } = signupData;
+
 
     mutation.mutate({email, password, confirmPassword, firstName, lastName, otp})
   }
@@ -60,6 +71,7 @@ function VerifyEmail() {
     const { email } = signupData;
 
     sendOtp.mutate(email)
+    setOtp("")
   }
 
   return (
