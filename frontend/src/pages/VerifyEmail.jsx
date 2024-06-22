@@ -7,12 +7,14 @@ import toast from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
 import { IoReload } from "react-icons/io5";
 import { setToken, setUserId } from "../Store/slices/authSlice"
+import { useCookies } from "react-cookie"
 
 function VerifyEmail() {
   const [otp, setOtp] = useState('');
   const signupData = useSelector((state) => state.signup)
   const navigate = useNavigate()
   const dispatch = useDispatch()
+  const [cookies, setCookie] = useCookies(['auth_token']);
 
   useEffect(()=> {
     if(!signupData) {
@@ -33,6 +35,13 @@ function VerifyEmail() {
 
       dispatch(setToken(data.auth_token))
       dispatch(setUserId(data.userId))
+
+      const expirationDate = new Date();
+      expirationDate.setDate(expirationDate.getDate() + 30);
+
+      setCookie("auth_token", data.auth_token, {
+        expires: expirationDate
+      })
     },
     onError: (error) => {
       toast.error(error.message)
