@@ -82,22 +82,15 @@ export const addMyHotel = async(formData) => {
     const response = await fetch(`${API_BASE_URL}/api/my-hotels/addHotel`, {
         method: "POST",
         credentials: "include",
-        body: formData,
-        headers: {
-            // Explicitly setting Content-Type to null or undefined
-            // to let the browser set it automatically based on FormData
-            "Content-Type": undefined 
-        }
+        body: formData
     })
 
-    console.log(response);
 
     if(!response.ok) {
         throw new Error("Failed to add hotel!");
     }
 
     const result = await response.json();
-    console.log( "hotel-->", result);
 
     toast.dismiss(toastId)
     return result;

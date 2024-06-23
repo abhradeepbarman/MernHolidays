@@ -7,7 +7,7 @@ import ImagesSection from "./ImagesSection"
 import { useEffect } from "react"
 
 
-const ManageHotelForm = ({onSave, isLoading, hotel}) => {
+const ManageHotelForm = ({onSave, isPending, hotel}) => {
 
     const {
         register,
@@ -24,13 +24,12 @@ const ManageHotelForm = ({onSave, isLoading, hotel}) => {
 
     
     const onsubmit = (data) => {
-      console.log("form data -->",data);
       const formData = new FormData()
 
       if(hotel) {
         formData.append("hotelId", hotel._id)
       }
-      
+
       formData.append("name", data.name)
       formData.append("city", data.city)
       formData.append("country", data.country)
@@ -70,11 +69,11 @@ const ManageHotelForm = ({onSave, isLoading, hotel}) => {
 
         <span className="flex justify-end">
           <button 
-          disabled={isLoading}
+          disabled={isPending}
           type="submit" 
           className="bg-blue-600 text-white p-2 font-bold hover:bg-blue-500 text-xl disabled:bg-gray-500">
             {
-              isLoading ? "Saving..." : "Save"
+              isPending ? "Saving..." : "Save"
             }
           </button>
         </span>

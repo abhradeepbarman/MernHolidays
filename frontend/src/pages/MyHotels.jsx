@@ -31,10 +31,6 @@ function MyHotels() {
     toast.error("Error");
   }
 
-  if (!hotels) {
-    return <span>No Hotels found</span>;
-  }
-
   return (
     <div className="space-y-5">
 
@@ -51,10 +47,14 @@ function MyHotels() {
 
       {/* Hotel Cards  */}
       <div className="grid grid-cols-1 gap-8">
-        {hotels.length === 0 && (
+        {
+          hotels.length === 0 && (
             <div className="font-bold text-3xl mt-7 mx-auto">Add your First Hotel</div>
-        )}
-        {hotels.map((hotel, index) => (
+          )
+        }
+        
+        {
+          hotels && hotels.length > 0 && hotels.map((hotel, index) => (
           <div
             key={index}
             className="flex flex-col justify-between border border-slate-300 rounded-lg p-8 gap-5"

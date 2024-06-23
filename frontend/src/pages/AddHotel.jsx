@@ -6,7 +6,7 @@ import toast from "react-hot-toast";
 
 function AddHotel() {
 
-  const { mutate, isLoading } = useMutation({
+  const { mutate, isPending } = useMutation({
     mutationFn: addMyHotel,
     onSuccess: () => toast.success("Hotel added"),
     onError: (err) => {
@@ -20,7 +20,7 @@ function AddHotel() {
   }
 
   return (
-    <ManageHotelForm onSave={handleSave} isLoading={isLoading} />
+    <ManageHotelForm onSave={handleSave} isPending={isPending} />
   )
 }
 
