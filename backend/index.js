@@ -22,7 +22,7 @@ mongoose.connect(process.env.MONGODB_CONNECTION_STRING)
     .catch(() => console.log("DB connection error"))
 
 const corsOptions = {
-    origin: 'http://localhost:5173', 
+    origin: process.env.FRONTEND_URL, 
     credentials: true
 };
 
