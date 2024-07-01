@@ -4,10 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon",
-    "client": "cd .. && cd frontend && npm run dev",
-    "server": "npm run start",
-    "dev": "concurrently -n \"client,server\" -c \"bgBlue,bgYellow\" \"npm run client\" \"npm run server\""
+    "start": "node index.js",
+    "dev": "nodemon"
   },
   "keywords": [],
   "author": "",
