@@ -37,14 +37,14 @@ function Booking() {
       enabled: !!hotelId && numberOfNights > 0
     });
 
-    console.log(paymentIntentData);
-
+    
     const { data: hotel } = useQuery({
       queryKey: ["fetchHotelById", hotelId],
       queryFn: () => fetchHotelById(hotelId),
       enabled: !!hotelId,
     });
-  
+
+    
     const { data: currentUser } = useQuery({
       queryKey: ["currentUser"],
       queryFn: fetchCurrentUser,

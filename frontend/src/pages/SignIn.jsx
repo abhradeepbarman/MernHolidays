@@ -40,7 +40,7 @@ function SignIn() {
         expirationDate.setDate(expirationDate.getDate() + 30);
 
         setCookies("auth_token", data.auth_token, {
-          expires: expirationDate
+          expires: expirationDate,
         })
 
         await queryClient.invalidateQueries("validateToken"),
