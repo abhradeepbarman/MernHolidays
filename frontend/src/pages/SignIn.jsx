@@ -14,7 +14,7 @@ function SignIn() {
     const navigate = useNavigate();
     const dispatch = useDispatch()
     const location = useLocation()
-    const [cookies, setCookies] = useCookies("auth_token")
+    const [cookies, setCookie] = useCookies("auth_token")
 
     const {
         register,
@@ -39,8 +39,9 @@ function SignIn() {
         const expirationDate = new Date();
         expirationDate.setDate(expirationDate.getDate() + 30);
 
-        setCookies("auth_token", data.auth_token, {
+        setCookie("auth_token", data.auth_token, {
           expires: expirationDate,
+          secure: import.meta.env.VITE_ENV_NODE_ENV === "production",
         })
 
         await queryClient.invalidateQueries("validateToken"),

@@ -14,7 +14,7 @@ function VerifyEmail() {
   const signupData = useSelector((state) => state.signup)
   const navigate = useNavigate()
   const dispatch = useDispatch()
-  const [cookies, setCookie] = useCookies(['auth_token']);
+  const [cookie, setCookie] = useCookies(['auth_token']);
 
   useEffect(()=> {
     if(!signupData) {
@@ -40,7 +40,8 @@ function VerifyEmail() {
       expirationDate.setDate(expirationDate.getDate() + 30);
 
       setCookie("auth_token", data.auth_token, {
-        expires: expirationDate
+        expires: expirationDate,
+        secure: import.meta.env.VITE_ENV_NODE_ENV === "production",
       })
     },
     onError: (error) => {
