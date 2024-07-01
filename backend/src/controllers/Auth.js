@@ -120,18 +120,17 @@ exports.register = async(req, res) => {
             expiresIn: "2d"
         })
 
-        res.cookie("auth_token", token, {
+        const options = {
+            expires: new Date(Date.now() + 2*24*60*60*1000),
             httpOnly: true,
-            secure: process.env.NODE_ENV === "production",
-            maxAge: 2*24*60*60*1000,
-        })
+        }
 
-        return res.status(200).json({
+        return res.status(200).cookie("auth_token", token, options).json({
             success: true,
             message: "User registered successfully",
             auth_token: token,
-            userId: newUser._id,
-        });
+            userId: newUser._id
+        })
     } 
     catch (error) {
         console.log(error);
@@ -181,14 +180,12 @@ exports.login = async(req, res) => {
             expiresIn: "2d"
         })
 
+        const options = {
+            expires: new Date(Date.now() + 2*24*60*60*1000),
+            // httpOnly: true,
+        }
 
-        res.cookie("auth_token", token, {
-            maxAge: 2*24*60*60*1000,
-            secure: process.env.NODE_ENV === 'production',
-            httpOnly: true
-        })
-
-        return res.status(200).json({
+        return res.status(200).cookie("auth_token", token, options).json({
             message: "Logged in successfully",
             auth_token: token,
             userId: user._id
