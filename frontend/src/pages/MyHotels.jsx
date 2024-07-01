@@ -5,24 +5,26 @@ import { BiHotel, BiMoney, BiStar } from "react-icons/bi";
 import { useQuery } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 import { RiDeleteBinLine } from "react-icons/ri";
+import { useSelector } from 'react-redux';
 import { useState } from "react";
 
 function MyHotels() {
 
   const [showConfirmationModal, setShowConfirmationModal] = useState(null)
+  const {token} = useSelector((state) => state.auth)
 
   const { data: hotels, isError, refetch } = useQuery({
     queryKey: ["fetchMyHotels"],
-    queryFn: fetchMyHotels,
+    queryFn: () => fetchMyHotels(token),
   });
 
   const handleAcceptBookingChange = async(hotelId) => {
-    await changeAcceptBooking(hotelId)
+    await changeAcceptBooking(hotelId, token)
     refetch()
   }
 
   const deleteHotel = async(hotelId) => {
-    await deleteHotelById(hotelId)
+    await deleteHotelById(hotelId, token)
     setShowConfirmationModal(null)
     refetch()
   }

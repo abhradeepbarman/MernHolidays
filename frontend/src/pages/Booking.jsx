@@ -19,6 +19,7 @@ function Booking() {
   const search = useSelector((state) => state.search)
     const {hotelId} = useParams()
     const navigate = useNavigate()
+    const {token} = useSelector((state) => state.auth)
 
     const [numberOfNights, setNumberOfNights] = useState(0)
 
@@ -32,8 +33,8 @@ function Booking() {
     }, [search.checkIn, search.checkOut])
 
     const {data: paymentIntentData} = useQuery({
-      queryKey: ["createPaymentIntent", hotelId, numberOfNights],
-      queryFn: () =>   createPaymentIntent(hotelId, numberOfNights.toString()), 
+      queryKey: ["createPaymentIntent", hotelId, numberOfNights, token],
+      queryFn: () =>   createPaymentIntent(hotelId, numberOfNights.toString(), token), 
       enabled: !!hotelId && numberOfNights > 0
     });
 
@@ -47,7 +48,7 @@ function Booking() {
     
     const { data: currentUser } = useQuery({
       queryKey: ["currentUser"],
-      queryFn: fetchCurrentUser,
+      queryFn: () => fetchCurrentUser(token),
     });
 
     if(!hotel) {

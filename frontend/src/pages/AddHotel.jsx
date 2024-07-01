@@ -2,12 +2,14 @@ import { addMyHotel } from "../api-client";
 import ManageHotelForm from "../forms/ManageHotelForm/ManageHotelForm"
 import { useMutation } from '@tanstack/react-query';
 import toast from "react-hot-toast";
+import { useSelector } from 'react-redux';
 
 
 function AddHotel() {
+  const {token} = useSelector((state) => state.auth)
 
   const { mutate, isPending } = useMutation({
-    mutationFn: addMyHotel,
+    mutationFn: (formData) => addMyHotel(formData, token),
     onSuccess: () => toast.success("Hotel added"),
     onError: (err) => {
       toast.error(err.message)
@@ -16,7 +18,7 @@ function AddHotel() {
   })
 
   const handleSave = (formData) => {
-    mutate(formData);
+    mutate(formData, token);
   }
 
   return (

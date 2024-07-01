@@ -3,12 +3,14 @@ import { footerData } from "../config/footer-data";
 import { Link } from "react-router-dom"
 import { useMutation } from "@tanstack/react-query"
 import { storeEmail } from "../api-client";
+import { useSelector } from 'react-redux';
 
 function Footer() {
   const [email, setEmail] = useState('');
+  const {token} = useSelector((state) => state.auth)
 
   const registerEmail = useMutation({
-    mutationFn: storeEmail(),
+    mutationFn: storeEmail(token),
     onSuccess: () => console.log("email registered"),
     onError: () => console.log("Email not registered")
   })

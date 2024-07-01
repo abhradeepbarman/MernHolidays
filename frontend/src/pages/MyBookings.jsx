@@ -1,10 +1,15 @@
 import { fetchMyBookings } from "../api-client";
 import { useQuery } from "@tanstack/react-query";
+import { useSelector } from 'react-redux';
 
 function MyBookings() {
+  const {token} = useSelector((state) => state.auth)
+  console.log(token);
+
   const { data: hotels } = useQuery({
     queryKey: ["fetchMyBookings"],
-    queryFn: fetchMyBookings,
+    queryFn: () => fetchMyBookings(token),
+    enabled: !!token,
   });
 
   if (!hotels || hotels.length == 0) {

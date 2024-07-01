@@ -36,13 +36,13 @@ function VerifyEmail() {
       dispatch(setToken(data.auth_token))
       dispatch(setUserId(data.userId))
 
-      const expirationDate = new Date();
-      expirationDate.setDate(expirationDate.getDate() + 30);
+      // const expirationDate = new Date();
+      // expirationDate.setDate(expirationDate.getDate() + 30);
 
-      setCookie("auth_token", data.auth_token, {
-        expires: expirationDate,
-        secure: import.meta.env.VITE_ENV_NODE_ENV === "production",
-      })
+      // setCookie("auth_token", data.auth_token, {
+      //   expires: expirationDate,
+      //   secure: import.meta.env.VITE_ENV_NODE_ENV === "production",
+      // })
     },
     onError: (error) => {
       toast.error(error.message)

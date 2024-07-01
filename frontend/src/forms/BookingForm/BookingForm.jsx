@@ -12,10 +12,11 @@ function BookingForm({currentUser, paymentIntent}) {
     const navigate = useNavigate()
 
     const search = useSelector((state) => state.search)
+    const {token} = useSelector((state) => state.auth)
     const {hotelId} = useParams()
 
     const { mutate: bookRoom, isPending } = useMutation({
-      mutationFn: createRoomBooking,
+      mutationFn: (formData, token) =>  createRoomBooking(formData, token),
       onSuccess: () => {
         toast.success("Booking saved!")
         navigate("/my-bookings")
@@ -60,9 +61,11 @@ function BookingForm({currentUser, paymentIntent}) {
         }
       )
 
+      console.log(result);
+
       if(result.paymentIntent?.status === "succeeded") {
         //book the room
-        bookRoom({...formData, paymentIntentId: result.paymentIntent.id})
+        bookRoom({...formData, paymentIntentId: result.paymentIntent.id, token})
       }
 
       toast.dismiss(toastId)
