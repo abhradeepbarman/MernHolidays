@@ -3,6 +3,7 @@ const bcrypt = require("bcryptjs")
 const jwt = require("jsonwebtoken")
 const otpGenerator = require('otp-generator')
 const OTP = require("../models/OTP")
+require("dotenv").config()
 
 exports.sendOtp = async(req, res) => {
     const {email} = req.body;
@@ -121,6 +122,8 @@ exports.register = async(req, res) => {
 
         res.cookie("auth_token", token, {
             maxAge: 2*24*60*60*1000,
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: 'None',
         })
 
         return res.status(200).json({
@@ -181,6 +184,8 @@ exports.login = async(req, res) => {
 
         res.cookie("auth_token", token, {
             maxAge: 2*24*60*60*1000,
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: 'None',
         })
 
         return res.status(200).json({
