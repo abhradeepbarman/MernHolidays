@@ -23,9 +23,9 @@ function Footer() {
   }
 
   return (
-    <div className="bg-blue-800 py-10">
+    <div className="bg-blue-800 py-10  px-3 text-center">
         <div className="container mx-auto flex justify-between items-center">
-            <span className="text-3xl text-white font-bold tracking-tight">
+            <span className="text-xl lg:text-3xl text-white font-bold tracking-tight">
                 MernHolidays.com
             </span>
 
@@ -36,7 +36,7 @@ function Footer() {
         </div>
 
         <div className="flex flex-col items-center container mx-auto space-y-8 mt-5">
-          <h1 className="text-white text-3xl font-semibold">
+          <h1 className="text-white text-2xl lg:text-3xl font-semibold">
             Stay in the know
           </h1>
           <p className="text-center text-gray-300 leading-relaxed px-20">
